@@ -67,9 +67,111 @@ Tone : Object {
 		"getPreset: " + textTone.postln;
 
 		switch(textTone,
-			"happy", {
-				"happy".postln;
-
+			"admiring", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"amused", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"eager", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"excited", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"grateful", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"joyful", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"loving", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"approving", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"angry", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"annoyed", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"disappointed", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"disapproving", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"repulsed", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"sad", {
 				preset.put(\rate, 1);
 				preset.put(\modFreq, 15);
 				preset.put(\speed, 1);
@@ -77,9 +179,111 @@ Tone : Object {
 				preset.put(\end, 1);
 				preset.put(\loop, 1);
 			},
-			"sad", {
-				"sad".postln;
-
+			"mournful", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"sympathetic", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"worried", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"remorseful", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"embarassed", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"fearful", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"confused", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"relieved", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"aware", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"confident", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"curious", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"neutral", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"optimistic", {
+				preset.put(\rate, 0.3);
+				preset.put(\modFreq, 0.5);
+				preset.put(\speed, 0.2);
+				preset.put(\start, 0);
+				preset.put(\end, 1);
+				preset.put(\loop, 1);
+			},
+			"surprised", {
 				preset.put(\rate, 0.3);
 				preset.put(\modFreq, 0.5);
 				preset.put(\speed, 0.2);
