@@ -1,32 +1,30 @@
 Tone : Object {
 
-	var txt, synthdef, synth, preset;
+	var synth, preset;
+
 
     *new {
         arg text, synthDef;
-        ^super.newCopyArgs(text, synthDef);
+		^super.new.init(text, synthDef);
     }
 
-	init {
-		var textTone = this.getToneFromText(txt);
+	init { | text, synthDef |
+		var textTone = this.getToneFromText(text);
 		var preset = this.getPreset(textTone);
 		if (preset == nil or: { preset == "" }) {
 			// do nothing
 		} {
-			synth = this.playSynth(
+			synth = this.playSynth(synthDef,
 				preset[\rate],
 				preset[\modFreq],
 				preset[\speed],
 				preset[\start],
 				preset[\end],
 				preset[\loop])
+
+			^synth;
 		}
     }
-
-	stopSynth {
-		synth.free;
-	}
-
 
 
 	/* -- private methods -- */
@@ -47,9 +45,9 @@ Tone : Object {
 		^textTone;
 	}
 
-	playSynth { | rate, modFreq, speed, start, end, loop |
+	playSynth { | synthDef, rate, modFreq, speed, start, end, loop |
 
-		synth = Synth(synthdef);
+		synth = Synth(synthDef);
 		synth.set(\rate, rate);
 		synth.set(\modFreq, modFreq);
 		synth.set(\speed, speed);
