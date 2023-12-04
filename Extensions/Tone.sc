@@ -44,7 +44,6 @@ Tone : Object {
 		//d["results"][0][1][1].postln; // secondary tone
 		//d["results"][0][2][1].postln; // tertiary tone
 
-
 		^textTone;
 	}
 
@@ -63,8 +62,6 @@ Tone : Object {
 
     getPreset { | textTone |
 		preset = Dictionary.new;
-
-		"getPreset: " + textTone.postln;
 
 		switch(textTone,
 			"admiring", {
