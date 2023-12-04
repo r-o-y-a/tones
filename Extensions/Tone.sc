@@ -8,11 +8,11 @@ Tone : Object {
     }
 
 	init {
-		var preset = this.getPreset(txt);
+		var textTone = this.getToneFromText(txt);
+		var preset = this.getPreset(textTone);
 		if (preset == nil or: { preset == "" }) {
 			// do nothing
 		} {
-
 			synth = this.playSynth(
 				preset[\rate],
 				preset[\modFreq],
@@ -31,6 +31,23 @@ Tone : Object {
 
 	/* -- private methods -- */
 
+	getToneFromText { | text |
+		var x, textTone;
+
+		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"APIKEY\", \"text\":\"" ++ text ++ "\"}\'";
+		x = x.unixCmdGetStdOut;
+		x.postln;
+		x = x.escapeChar($");
+		x = x.replace("\\", replace:"");
+		x = x.parseJSON;
+		textTone = x["results"][0][0][1];
+		//d["results"][0][1][1].postln; // secondary tone
+		//d["results"][0][2][1].postln; // tertiary tone
+
+
+		^textTone;
+	}
+
 	playSynth { | rate, modFreq, speed, start, end, loop |
 
 		synth = Synth(synthdef);
@@ -44,10 +61,12 @@ Tone : Object {
         ^synth;
     }
 
-    getPreset { | text |
+    getPreset { | textTone |
 		preset = Dictionary.new;
 
-		switch(text,
+		"getPreset: " + textTone.postln;
+
+		switch(textTone,
 			"happy", {
 				"happy".postln;
 
