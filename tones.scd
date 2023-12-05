@@ -1,5 +1,3 @@
-//play({ Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(1)); });
-
 (
 ~samplePaths = [
     "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/buchla_beep.wav",
@@ -23,61 +21,14 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, envAtt
 )
 
 
-
-]
-
-(
-~rate1 = 1;
-~pseqvalue1 = 0;
-p = Pdef(\pSample1, Pmono(
-    \samplePlayer,
-    \bufnum, ~buffers[2].bufnum,
-    \rate, Pfunc { ~rate1 },
-	\lfoFreq, Pseq([ Pfunc {~pseqvalue1}], inf),
-    \amp, 0.5,
-	\envAttack, 0.2,
-	\envRelease, 10,
-	\filterFreq, 1500,
-	\filterRes, 3,
-	\loop, 1,
-    \speed, Pseq([1, 0.8, 1.2], inf),
-    \dur, 1,
-    \gate, 1
-));
-p.play;
-)
-p.stop;
-
-~rate1 = 1.05;
-~pseqvalue1 = 20;
+m = Toner.new(\samplePlayer);
+var p1 = m.txt("I am very happy");
+var p1 = m.txt("now i am very sad");
+var p1 = m.txt("admiring");
+p1.at(\pattern1).stop;
 
 
 
-
-(
-~rate2 = 1;
-~pseqvalue2 = 0;
-q = Pdef(\pSample2, Pmono(
-    \samplePlayer,
-    \bufnum, ~buffers[2].bufnum,
-    \rate, Pfunc { ~rate2 },
-	\lfoFreq, Pseq([ Pfunc {~pseqvalue2}], inf),
-    \amp, 0.5,
-	\envAttack, 0.2,
-	\envRelease, 10,
-	\filterFreq, 1500,
-	\filterRes, 3,
-	\loop, 1,
-    \speed, Pseq([1, 0.8, 1.2], inf),
-    \dur, 1,
-    \gate, 1
-));
-q.play;
-)
-q.stop;
-
-~rate2 = 1;
-~pseqvalue2 = 50;
 
 
 
