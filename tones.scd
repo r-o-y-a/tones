@@ -1,92 +1,87 @@
+//play({ Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(1)); });
+
 (
-var samplePaths = [
+~samplePaths = [
     "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/buchla_beep.wav",
     "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/em.wav",
     "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/opz_flute.wav"
 ];
+~buffers = ~samplePaths.collect { |path| Buffer.read(s, path) };
 
-~buffers = Array.fill(samplePaths.size, { |index|
-    var path = samplePaths[index];
-    var buffer = File.exists(path).if {
-        Buffer.read(s, path);
-    } {
-        "File not found: ".post; path.postln;
-        nil;
-    };
-    buffer;
-});
-)
+SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, envAttack = 0.1, envRelease = 1, filterFreq = 1000, filterRes = 0.5, loop = 0 |
 
-(
-SynthDef(\modBuchlaBeep, { |buf, speed = 1, modFreq = 2|
-    var env, sig, lfo;
-	lfo = LFSaw.kr(modFreq);
-    //env = EnvGen.kr(Env.perc, doneAction: 2);
-	sig = PlayBuf.ar(
-		1,
-		~buffers[0].bufnum,
-		speed * BufRateScale.kr(buf),
-		loop: 1
-	);
-	sig = Pan2.ar(sig, lfo);
+    var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
+    var playbackRate = rate * lfo;
 
-    Out.ar(0, sig);
-}).add;
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: 0, doneAction: 1);
+	sound = sound *  amp;
 
-SynthDef(\modEm, {|buf, speed = 1, modFreq = 2|
-	var sig, lfo;
-	lfo = LFSaw.kr(modFreq);
-	sig = PlayBuf.ar(
-		1,
-		~buffers[1].bufnum,
-		speed * BufRateScale.kr(buf),
-		loop: 1
-	);
-	sig = Pan2.ar(sig, lfo);
-	Out.ar(0, sig);
-}).add;
+    sound = LPF.ar(sound, filterFreq, filterRes);
 
-SynthDef(\modOpzFlute, {|buf, speed = 1, modFreq = 2|
-	var sig, lfo;
-	lfo = LFSaw.kr(modFreq);
-	sig = PlayBuf.ar(
-		1,
-		~buffers[2].bufnum,
-		speed * BufRateScale.kr(buf),
-		loop: 1
-	);
-	sig = Pan2.ar(sig, lfo);
-	Out.ar(0, sig);
+    Out.ar(0, sound);
 }).add;
 )
 
 
-(
-// test synth presets
-var synth = Synth(\modBuchlaBeep);
-synth.set(\rate, 1);
-synth.set(\modFreq, 15);
-synth.set(\speed, 1);
-synth.set(\start, 0);
-synth.set(\end, 1);
-synth.set(\loop, 1);
-)
 
-// example playback
-(
-m = Tone.new("I am very happy", \modOpzFlute);
-m.init;
-)
-m.stopSynth();
+]
 
 (
-h = Tone.new("sad", \modBuchlaBeep);
-h.init;
+~rate1 = 1;
+~pseqvalue1 = 0;
+p = Pdef(\pSample1, Pmono(
+    \samplePlayer,
+    \bufnum, ~buffers[2].bufnum,
+    \rate, Pfunc { ~rate1 },
+	\lfoFreq, Pseq([ Pfunc {~pseqvalue1}], inf),
+    \amp, 0.5,
+	\envAttack, 0.2,
+	\envRelease, 10,
+	\filterFreq, 1500,
+	\filterRes, 3,
+	\loop, 1,
+    \speed, Pseq([1, 0.8, 1.2], inf),
+    \dur, 1,
+    \gate, 1
+));
+p.play;
 )
-h.stopSynth();
+p.stop;
+
+~rate1 = 1.05;
+~pseqvalue1 = 20;
+
+
+
 
 (
-x = Tone.new("so very sad", \modEm);
-x.init;
+~rate2 = 1;
+~pseqvalue2 = 0;
+q = Pdef(\pSample2, Pmono(
+    \samplePlayer,
+    \bufnum, ~buffers[2].bufnum,
+    \rate, Pfunc { ~rate2 },
+	\lfoFreq, Pseq([ Pfunc {~pseqvalue2}], inf),
+    \amp, 0.5,
+	\envAttack, 0.2,
+	\envRelease, 10,
+	\filterFreq, 1500,
+	\filterRes, 3,
+	\loop, 1,
+    \speed, Pseq([1, 0.8, 1.2], inf),
+    \dur, 1,
+    \gate, 1
+));
+q.play;
 )
-x.stopSynth();
+q.stop;
+
+~rate2 = 1;
+~pseqvalue2 = 50;
+
+
+
+
+
+
+
