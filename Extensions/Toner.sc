@@ -91,9 +91,12 @@ Toner {
 
 	getToneFromText { | text |
 		var x, textTone;
-/*
 
-		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"APIKEY\", \"text\":\"" ++ text ++ "\"}\'";
+		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
+		var apikey = File.readAllString("/Users/roya/Documents/roya/Supercollider/KMH/tones/apikey.scd");
+
+		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
+		x = x.replace("\n", replace:"");
 		x = x.unixCmdGetStdOut;
 		x.postln;
 		x = x.escapeChar($");
@@ -103,7 +106,7 @@ Toner {
 		//d["results"][0][1][1].postln; // secondary tone
 		//d["results"][0][2][1].postln; // tertiary tone
 
-*/
+/*
 		// code for when i get rate-limited from the API :I
 		switch(text,
 			"It was a cold winter day.", {
@@ -113,7 +116,7 @@ Toner {
 				textTone = "neutral";
 			},
 			"How nice everything looked on my way to school, I thought.", {
-				textTone = "optimistic";
+				textTone = "admiring";
 			},
 			"Suddenly, a crow flew across the horizon and startled me.", {
 				textTone = "surprised";
@@ -121,12 +124,12 @@ Toner {
 			"It went away but then came back again, flying in my face.", {
 				textTone = "annoyed";
 			},
-			"Go away! I said", {
+			"Go away! I said.", {
 				textTone = "angry";
 			}
 		);
 
-
+*/
 		textTone.postln;
 		^textTone;
 	}
@@ -367,47 +370,24 @@ Toner {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"angry", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
-				presets[0].put(\start, 0);
-				presets[0].put(\end, 1);
-				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0);
-
-				presets[1].put(\rate, 0.3);
-				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
-				presets[1].put(\start, 0);
-				presets[1].put(\end, 1);
-				presets[1].put(\loop, 1);
-				presets[1].put(\lfoPseqValue, 0);
-
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
-				presets[2].put(\start, 0);
-				presets[2].put(\end, 1);
-				presets[2].put(\loop, 1);
-				presets[2].put(\lfoPseqValue, 0);
-			},
-			"annoyed", {
-				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
+				presets[0].put(\rate, [0.5, 0.2, 0.4]);
 				presets[0].put(\amp, [0.5]);
-				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0.1);
+				presets[0].put(\lfoPseqValue, 0);
 				presets[0].put(\reverbMix, 7);
 				presets[0].put(\pitchShift, 0);
 				presets[0].put(\delayMaxTime, 0);
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
-				presets[1].put(\amp, [0]);
+				presets[1].put(\rate, [1]);
+				presets[1].put(\amp, [0.5]);
+				presets[1].put(\filterFreq, 3000);
+				presets[1].put(\filterRes, 4);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
@@ -418,7 +398,7 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
+				presets[2].put(\rate, [0.2]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -426,7 +406,50 @@ Toner {
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
-				presets[2].put(\reverbMix, 4);
+				presets[2].put(\reverbMix, 1);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 6);
+			},
+			"annoyed", {
+				presets[0].put(\rate, [2.7, 2.5, 2.9, 2.6]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 3000);
+				presets[0].put(\filterRes, 3);
+				presets[0].put(\start, 0);
+				presets[0].put(\end, 1);
+				presets[0].put(\loop, 1);
+				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\reverbMix, 7);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
+
+				presets[1].put(\rate, [1]);
+				presets[1].put(\amp, [0.5]);
+				presets[1].put(\filterFreq, 1500);
+				presets[1].put(\filterRes, 3);
+				presets[1].put(\start, 0);
+				presets[1].put(\end, 1);
+				presets[1].put(\loop, 1);
+				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
+
+				presets[2].put(\rate, [1]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
+				presets[2].put(\start, 0);
+				presets[2].put(\end, 1);
+				presets[2].put(\loop, 1);
+				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 1);
 				presets[2].put(\pitchShift, 0);
 				presets[2].put(\delayMaxTime, 0.1);
 				presets[2].put(\delayTime, 0.1);
@@ -535,7 +558,7 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8]);
+				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]);
 				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -908,7 +931,7 @@ Toner {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"surprised", {
-				presets[0].put(\rate, [2.3, 1.6, 3.1]);
+				presets[0].put(\rate, [3.3, 3.7, 3.1, 3.9]);
 				presets[0].put(\amp, [0.5, 0.4, 0.2]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -935,7 +958,7 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
+				presets[2].put(\rate, [2.9]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);

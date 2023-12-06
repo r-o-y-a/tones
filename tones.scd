@@ -1,11 +1,9 @@
 (
 s.waitForBoot {
-~samplePaths = [
-    "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/buchla_beep.wav",
-    "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/em.wav",
-    "/Users/roya/Documents/roya/Supercollider/KMH/tones/samples/opz_flute.wav"
-];
-~buffers = ~samplePaths.collect { |path| Buffer.read(s, path) };
+
+a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
+~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
+//a[0].play;
 
 SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0 |
 
@@ -18,7 +16,7 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 	//sound = PitchShift.ar(sound, 2, pitchShift);
 	// PitchShift_Ctor: alloc failed, increase server's RT memory (e.g. via ServerOptions)
 
-	//delay
+	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
     sound = LPF.ar(sound, filterFreq, filterRes);
@@ -27,26 +25,23 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
     Out.ar(0, sound);
 }).add;
 
-//s.latency = 0.5;
-
 s.sync;
 
 t = Toner.new(\samplePlayer);
 }
 );
 
-p = t.txt("It was a cold winter day."); // sad
-p = t.txt("But the sun was shining."); // neutral
-p = t.txt("How nice everything looked on my way to school, I thought."); //admiring
-p = t.txt("Suddenly, a crow flew across the horizon and startled me."); // surprised
-p = t.txt("It went away but then came back again, flying in my face."); // annoyed
-p = t.txt("Go away! I said");  // angry
+p = t.txt("It was a cold winter day.");
+p = t.txt("But the sun was shining.");
+p = t.txt("How nice everything looked on my way to school, I thought.");
+p = t.txt("Suddenly, a crow flew across the horizon and startled me.");
+p = t.txt("It went away but then came back again, flying in my face.");
+p = t.txt("Go away! I said.");
 
 
 p.at(\pattern1).stop;
 p.at(\pattern2).stop;
 p.at(\pattern3).stop;
-
 
 
 
