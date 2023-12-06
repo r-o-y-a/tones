@@ -483,7 +483,7 @@ Toner : Object {
 				presets[1].put(\decayTime, 0);
 
 				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8]);
-				presets[2].put(\amp, [0.5, 0.7, 0.9, 1, 0.4, 0.2]);
+				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
