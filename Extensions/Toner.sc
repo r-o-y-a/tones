@@ -1,14 +1,11 @@
-Toner : Object {
+Toner {
 
-	var synthdef, presets, patterns;
+	var synthdef;
+	var presets, patterns;
 
     *new {
         arg synthDef;
-		^super.new.init(synthDef);
-    }
-
-	init { | synthDef |
-		synthdef = synthDef;
+		^super.newCopyArgs(synthDef);
     }
 
 	txt { | text |
@@ -110,36 +107,52 @@ Toner : Object {
 
     getPresets { | textTone |
 		presets = [Dictionary.new, Dictionary.new, Dictionary.new];
-
+		//case {if("admiring" or: {"amused"})} {alskdjf}
+		//case {if("admiring" or: {"amused"})} {alskdjf}
 		switch(textTone,
 			"admiring", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
+				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\lfoPseqValue, 0.1);
+				presets[0].put(\reverbMix, 7);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, 0.3);
-				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			},
 			"amused", {
 				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
 				presets[0].put(\speed, 0.2);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
@@ -147,7 +160,6 @@ Toner : Object {
 				presets[0].put(\lfoPseqValue, 0);
 
 				presets[1].put(\rate, 0.3);
-				presets[1].put(\modFreq, 0.5);
 				presets[1].put(\speed, 0.2);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -155,7 +167,6 @@ Toner : Object {
 				presets[1].put(\lfoPseqValue, 0);
 
 				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
 				presets[2].put(\speed, 0.2);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
@@ -355,29 +366,45 @@ Toner : Object {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"annoyed", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
+				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\lfoPseqValue, 0.1);
+				presets[0].put(\reverbMix, 7);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, 0.3);
-				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			},
 			"disappointed", {
 				presets[0].put(\rate, 0.3);
@@ -647,29 +674,46 @@ Toner : Object {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"confused", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
+				presets[0].put(\rate, [1, 1.2, 1.4, 1.6]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\lfoPseqValue, 1);
+				presets[0].put(\reverbMix, 7);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, 0.3);
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			},
 			"relieved", {
 				presets[0].put(\rate, 0.3);
@@ -772,29 +816,45 @@ Toner : Object {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"neutral", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
+				presets[0].put(\rate, [1]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
 				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\reverbMix, 1);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, 0.3);
-				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			},
 			"optimistic", {
 				presets[0].put(\rate, 0.3);
@@ -822,32 +882,88 @@ Toner : Object {
 				presets[2].put(\lfoPseqValue, 0);
 			},
 			"surprised", {
-				presets[0].put(\rate, 0.3);
-				presets[0].put(\modFreq, 0.5);
-				presets[0].put(\speed, 0.2);
+				presets[0].put(\rate, [2.3, 1.6, 3.1]);
+				presets[0].put(\amp, [0.5, 0.4, 0.2]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
 				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
-				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\lfoPseqValue, 0.1);
+				presets[0].put(\reverbMix, 7);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, 0.3);
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
-				presets[1].put(\speed, 0.2);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, 0.3);
-				presets[2].put(\modFreq, 0.5);
-				presets[2].put(\speed, 0.2);
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
 				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			},
 			{ |default|
-				"neutral".postln;
+				presets[0].put(\rate, [1]);
+				presets[0].put(\amp, [0.5]);
+				presets[0].put(\filterFreq, 1500);
+				presets[0].put(\filterRes, 3);
+				presets[0].put(\start, 0);
+				presets[0].put(\end, 1);
+				presets[0].put(\loop, 1);
+				presets[0].put(\lfoPseqValue, 0);
+				presets[0].put(\reverbMix, 1);
+				presets[0].put(\pitchShift, 0);
+				presets[0].put(\delayMaxTime, 0);
+				presets[0].put(\delayTime, 0);
+				presets[0].put(\decayTime, 0);
+
+				presets[1].put(\rate, [0]);
+				presets[1].put(\amp, [0]);
+				presets[1].put(\modFreq, 0.5);
+				presets[1].put(\start, 0);
+				presets[1].put(\end, 1);
+				presets[1].put(\loop, 1);
+				presets[1].put(\lfoPseqValue, 0);
+				presets[1].put(\reverbMix, 1);
+				presets[1].put(\pitchShift, 0);
+				presets[1].put(\delayMaxTime, 0);
+				presets[1].put(\delayTime, 0);
+				presets[1].put(\decayTime, 0);
+
+				presets[2].put(\rate, [3.0]);
+				presets[2].put(\amp, [0.5]);
+				presets[2].put(\filterFreq, 500);
+				presets[2].put(\filterRes, 3);
+				presets[2].put(\start, 0);
+				presets[2].put(\end, 1);
+				presets[2].put(\loop, 1);
+				presets[2].put(\lfoPseqValue, 0);
+				presets[2].put(\reverbMix, 4);
+				presets[2].put(\pitchShift, 0);
+				presets[2].put(\delayMaxTime, 0.1);
+				presets[2].put(\delayTime, 0.1);
+				presets[2].put(\decayTime, 4);
 			}
 		);
 		^presets;
