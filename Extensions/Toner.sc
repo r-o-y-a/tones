@@ -91,6 +91,7 @@ Toner {
 
 	getToneFromText { | text |
 		var x, textTone;
+/*
 
 		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"APIKEY\", \"text\":\"" ++ text ++ "\"}\'";
 		x = x.unixCmdGetStdOut;
@@ -102,6 +103,31 @@ Toner {
 		//d["results"][0][1][1].postln; // secondary tone
 		//d["results"][0][2][1].postln; // tertiary tone
 
+*/
+		// code for when i get rate-limited from the API :I
+		switch(text,
+			"It was a cold winter day.", {
+				textTone = "sad";
+			},
+			"But the sun was shining.", {
+				textTone = "neutral";
+			},
+			"How nice everything looked on my way to school, I thought.", {
+				textTone = "optimistic";
+			},
+			"Suddenly, a crow flew across the horizon and startled me.", {
+				textTone = "surprised";
+			},
+			"It went away but then came back again, flying in my face.", {
+				textTone = "annoyed";
+			},
+			"Go away! I said", {
+				textTone = "angry";
+			}
+		);
+
+
+		textTone.postln;
 		^textTone;
 	}
 

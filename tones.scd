@@ -35,12 +35,12 @@ t = Toner.new(\samplePlayer);
 }
 );
 
-p = t.txt("It was a cold winter day.");
-p = t.txt("But the sun was shining.");
-p = t.txt("How nice everything looked on my way to school, I thought.");
-p = t.txt("Suddenly, a crow flew across the horizon and startled me.");
-p = t.txt("It went away but then came back again, flying in my face.");
-p = t.txt("Go away! I said");
+p = t.txt("It was a cold winter day."); // sad
+p = t.txt("But the sun was shining."); // neutral
+p = t.txt("How nice everything looked on my way to school, I thought."); //admiring
+p = t.txt("Suddenly, a crow flew across the horizon and startled me."); // surprised
+p = t.txt("It went away but then came back again, flying in my face."); // annoyed
+p = t.txt("Go away! I said");  // angry
 
 
 p.at(\pattern1).stop;
