@@ -8,7 +8,7 @@ Toner {
 		^super.newCopyArgs(synthDef);
     }
 
-	txt { | text |
+	t { | text |
 		var textTone = this.getToneFromText(text);
 		var presets = this.getPresets(textTone);
 		if (presets == nil or: { presets == "" }) {
@@ -93,7 +93,8 @@ Toner {
 		var x, textTone;
 
 		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
-		var apikey = File.readAllString("/Users/roya/Documents/roya/Supercollider/KMH/tones/apikey.scd");
+		var apikey = File.readAllString(path ++ "apikey.scd");
+
 
 		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
 		x = x.replace("\n", replace:"");
@@ -128,8 +129,8 @@ Toner {
 				textTone = "angry";
 			}
 		);
-
 */
+
 		textTone.postln;
 		^textTone;
 	}

@@ -5,22 +5,24 @@ a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 //a[0].play;
 
-SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0 |
+SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
-
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: 0, doneAction: 1);
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0);
 	sound = sound *  amp;
 
 	//sound = PitchShift.ar(sound, 2, pitchShift);
 	// PitchShift_Ctor: alloc failed, increase server's RT memory (e.g. via ServerOptions)
 
+	//sound = Warp1.ar(1, sound, MouseX.kr(0,1), MouseY.kr(0.5,2), 0.1, -1, 8, 0.1, 2);
+
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
     sound = LPF.ar(sound, filterFreq, filterRes);
-	sound = FreeVerb.ar(sound, 0.5, reverbMix);
+	sound = FreeVerb.ar(sound, 0.5, reverbMix) *0.1;
+DetectSilence.ar(sound, doneAction: 2);
 
     Out.ar(0, sound);
 }).add;
@@ -31,12 +33,14 @@ t = Toner.new(\samplePlayer);
 }
 );
 
-p = t.txt("It was a cold winter day.");
-p = t.txt("But the sun was shining.");
-p = t.txt("How nice everything looked on my way to school, I thought.");
-p = t.txt("Suddenly, a crow flew across the horizon and startled me.");
-p = t.txt("It went away but then came back again, flying in my face.");
-p = t.txt("Go away! I said.");
+p = t.t("It was a cold winter day.");
+p = t.t("But the sun was shining.");
+p = t.t("How nice everything looked on my way to school, I thought.");
+p = t.t("Suddenly, a crow flew across the horizon and startled me.");
+p = t.t("It went away but then came back again, flying in my face.");
+p = t.t("Go away! I said.");
+
+
 
 
 p.at(\pattern1).stop;
