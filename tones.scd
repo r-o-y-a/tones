@@ -20,9 +20,10 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
-    sound = LPF.ar(sound, filterFreq, filterRes);
+	sound = LPF.ar(sound, filterFreq, filterRes);
+    //sound = HPF.ar(sound, filterFreq, filterRes); // test
 	sound = FreeVerb.ar(sound, 0.5, reverbMix) *0.1;
-DetectSilence.ar(sound, doneAction: 2);
+	DetectSilence.ar(sound, doneAction: 2);
 
     Out.ar(0, sound);
 }).add;
@@ -33,12 +34,16 @@ t = Toner.new(\samplePlayer);
 }
 );
 
+
 p = t.t("It was a cold winter day.");
 p = t.t("But the sun was shining.");
 p = t.t("How nice everything looked on my way to school, I thought.");
 p = t.t("Suddenly, a crow flew across the horizon and startled me.");
 p = t.t("It went away but then came back again, flying in my face.");
 p = t.t("Go away! I said.");
+p = t.t("neutral");
+p = t.t("It was a cold winter day.");
+
 
 
 
@@ -46,6 +51,25 @@ p = t.t("Go away! I said.");
 p.at(\pattern1).stop;
 p.at(\pattern2).stop;
 p.at(\pattern3).stop;
+p.at(\pattern4).stop;
+p.at(\pattern5).stop;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
