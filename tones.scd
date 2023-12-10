@@ -48,11 +48,11 @@ p = t.t("It was a cold winter day.");
 
 
 
-p.at(\pattern1).stop;
-p.at(\pattern2).stop;
-p.at(\pattern3).stop;
-p.at(\pattern4).stop;
-p.at(\pattern5).stop;
+p.at(\p1).stop;
+p.at(\p2).stop;
+p.at(\p3).stop;
+p.at(\p4).stop;
+p.at(\p5).stop;
 
 
 

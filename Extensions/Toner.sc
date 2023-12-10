@@ -42,7 +42,7 @@ Toner {
 				\pitchShift, presets[0].at(\pitchShift)
 		    )
 		);
-		patterns.put(\pattern1, p1);
+		patterns.put(\p1, p1);
 		p1.play;
 
 		p2 = Pdef(\pSample2,
@@ -62,7 +62,7 @@ Toner {
 				\pitchShift, presets[1].at(\pitchShift)
 		    )
 		);
-		patterns.put(\pattern2, p2);
+		patterns.put(\p2, p2);
 		p2.play;
 
 		p3 = Pdef(\pSample3,
@@ -82,7 +82,7 @@ Toner {
 				\pitchShift, presets[2].at(\pitchShift)
 		    )
 		);
-		patterns.put(\pattern3, p3);
+		patterns.put(\p3, p3);
 		p3.play;
 
 
@@ -103,7 +103,7 @@ Toner {
 				\pitchShift, presets[3].at(\pitchShift)
 		    )
 		);
-		patterns.put(\pattern4, p4);
+		patterns.put(\p4, p4);
 		p4.play;
 
 
@@ -124,7 +124,7 @@ Toner {
 				\pitchShift, presets[4].at(\pitchShift)
 		    )
 		);
-		patterns.put(\pattern5, p5);
+		patterns.put(\p5, p5);
 		p5.play;
 
 
@@ -1174,9 +1174,10 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
+				presets[1].put(\rate, [1]);
 				presets[1].put(\amp, [0]);
-				presets[1].put(\modFreq, 0.5);
+				presets[1].put(\filterFreq, 1500);
+				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
@@ -1201,8 +1202,10 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
-				presets[3].put(\amp, [0]);
+				presets[3].put(\rate, [1]);
+				presets[3].put(\amp, [0.1]);
+				presets[3].put(\filterFreq, 1500);
+				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
@@ -1987,7 +1990,9 @@ Toner {
 				presets[0].put(\decayTime, 0);
 
 				presets[1].put(\rate, [0]);
-				presets[1].put(\amp, [0]);
+				presets[1].put(\amp, [0.1]);
+				presets[1].put(\filterFreq, 1500);
+				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
@@ -2013,7 +2018,9 @@ Toner {
 				presets[2].put(\decayTime, 4);
 
 				presets[3].put(\rate, [0]);
-				presets[3].put(\amp, [0]);
+				presets[3].put(\amp, [0.1]);
+				presets[3].put(\filterFreq, 1500);
+				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
@@ -2025,7 +2032,7 @@ Toner {
 				presets[3].put(\decayTime, 0);
 
 				presets[4].put(\rate, [3.0]);
-				presets[4].put(\amp, [0.5]);
+				presets[4].put(\amp, [0]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
 				presets[4].put(\start, 0);
