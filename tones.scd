@@ -46,8 +46,6 @@ p = t.t("It was a cold winter day.");
 
 
 
-
-
 p.at(\p1).stop;
 p.at(\p2).stop;
 p.at(\p3).stop;
