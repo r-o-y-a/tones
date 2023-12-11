@@ -1,15 +1,15 @@
 Toner {
 
-	var synthdef;
+	var synthdef, runOffline = false;
 	var presets, patterns;
 
     *new {
-        arg synthDef;
-		^super.newCopyArgs(synthDef);
+        arg synthDef, runOffline;
+		^super.newCopyArgs(synthDef, runOffline);
     }
 
 	t { | text |
-		var textTone = this.getToneFromText(text);
+		var textTone = this.getToneFromText(text, runOffline);
 		var presets = this.getPresets(textTone);
 		if (presets == nil or: { presets == "" }) {
 			// do nothing
@@ -44,6 +44,7 @@ Toner {
 		);
 		patterns.put(\p1, p1);
 		p1.play;
+
 
 		p2 = Pdef(\pSample2,
 			Pmono(
@@ -132,131 +133,136 @@ Toner {
 		^patterns;
 	}
 
-	getToneFromText { | text |
+	getToneFromText { | text, runOffline |
 		var x, textTone;
 
 		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
 		var apikey = File.readAllString(path ++ "apikey.scd");
 
 
-		x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
-		x = x.replace("\n", replace:"");
-		x = x.unixCmdGetStdOut;
-		x.postln;
-		x = x.escapeChar($");
-		x = x.replace("\\", replace:"");
-		x = x.parseJSON;
-		textTone = x["results"][0][0][1];
-		//d["results"][0][1][1].postln; // secondary tone
-		//d["results"][0][2][1].postln; // tertiary tone
+		if (runOffline == false || runOffline.isNil) {
+			x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
+			x = x.replace("\n", replace:"");
+			x = x.unixCmdGetStdOut;
+			x.postln;
+			x = x.escapeChar($");
+			x = x.replace("\\", replace:"");
+			x = x.parseJSON;
+			textTone = x["results"][0][0][1];
+			//d["results"][0][1][1].postln; // secondary tone
+			//d["results"][0][2][1].postln; // tertiary tone
 
-/*
-		// code for when i get rate-limited from the API :I
-		switch(text,
-			"It was a cold winter day.", {
-				textTone = "sad";
-			},
-			"But the sun was shining.", {
-				textTone = "neutral";
-			},
-			"How nice everything looked on my way to school, I thought.", {
-				textTone = "admiring";
-			},
-			"Suddenly, a crow flew across the horizon and startled me.", {
-				textTone = "surprised";
-			},
-			"It went away but then came back again, flying in my face.", {
-				textTone = "annoyed";
-			},
-			"Go away! I said.", {
-				textTone = "angry";
-			},
-			"admiring", {
-				textTone = "admiring";
-			},
-			"amused", {
-				textTone = "amused";
-			},
-			"eager", {
-				textTone = "eager";
-			},
-			"excited", {
-				textTone = "excited";
-			},
-			"grateful", {
-				textTone = "grateful";
-			},
-			"joyful", {
-				textTone = "joyful";
-			},
-			"loving", {
-				textTone = "loving";
-			},
-			"approving", {
-				textTone = "approving";
-			},
-			"angry", {
-				textTone = "angry";
-			},
-			"annoyed", {
-				textTone = "annoyed";
-			},
-			"disappointed", {
-				textTone = "disappointed";
-			},
-			"disapproving", {
-				textTone = "disapproving";
-			},
-			"repulsed", {
-				textTone = "repulsed";
-			},
-			"sad", {
-				textTone = "sad";
-			},
-			"mournful", {
-				textTone = "mournful";
-			},
-			"sympathetic", {
-				textTone = "sympathetic";
-			},
-			"worried", {
-				textTone = "worried";
-			},
-			"remorseful", {
-				textTone = "remorseful";
-			},
-			"embarassed", {
-				textTone = "embarassed";
-			},
-			"fearful", {
-				textTone = "fearful";
-			},
-			"confused", {
-				textTone = "confused";
-			},
-			"relieved", {
-				textTone = "relieved";
-			},
-			"aware", {
-				textTone = "aware";
-			},
-			"confident", {
-				textTone = "confident";
-			},
-			"curious", {
-				textTone = "curious";
-			},
-			"neutral", {
-				textTone = "neutral";
-			},
-			"optimistic", {
-				textTone = "optimistic";
-			},
-			"surprised", {
-				textTone = "surprised";
-			}
-		);
-*/
+		}
+		{
+			// code for when i get rate-limited from the API :I
+			switch(text,
+				"It was a cold winter day.", {
+					textTone = "sad";
+				},
+				"But the sun was shining.", {
+					textTone = "neutral";
+				},
+				"How nice everything looked on my way to school, I thought.", {
+					textTone = "admiring";
+				},
+				"Suddenly, a crow flew across the horizon and startled me.", {
+					textTone = "surprised";
+				},
+				"It went away but then came back again, flying in my face.", {
+					textTone = "annoyed";
+				},
+				"Go away! I said.", {
+					textTone = "angry";
+				},
+				"It went away this time for good and everything was fine again.", {
+					textTone = "relieved";
+				},
+				"admiring", {
+					textTone = "admiring";
+				},
+				"amused", {
+					textTone = "amused";
+				},
+				"eager", {
+					textTone = "eager";
+				},
+				"excited", {
+					textTone = "excited";
+				},
+				"grateful", {
+					textTone = "grateful";
+				},
+				"joyful", {
+					textTone = "joyful";
+				},
+				"loving", {
+					textTone = "loving";
+				},
+				"approving", {
+					textTone = "approving";
+				},
+				"angry", {
+					textTone = "angry";
+				},
+				"annoyed", {
+					textTone = "annoyed";
+				},
+				"disappointed", {
+					textTone = "disappointed";
+				},
+				"disapproving", {
+					textTone = "disapproving";
+				},
+				"repulsed", {
+					textTone = "repulsed";
+				},
+				"sad", {
+					textTone = "sad";
+				},
+				"mournful", {
+					textTone = "mournful";
+				},
+				"sympathetic", {
+					textTone = "sympathetic";
+				},
+				"worried", {
+					textTone = "worried";
+				},
+				"remorseful", {
+					textTone = "remorseful";
+				},
+				"embarassed", {
+					textTone = "embarassed";
+				},
+				"fearful", {
+					textTone = "fearful";
+				},
+				"confused", {
+					textTone = "confused";
+				},
+				"relieved", {
+					textTone = "relieved";
+				},
+				"aware", {
+					textTone = "aware";
+				},
+				"confident", {
+					textTone = "confident";
+				},
+				"curious", {
+					textTone = "curious";
+				},
+				"neutral", {
+					textTone = "neutral";
+				},
+				"optimistic", {
+					textTone = "optimistic";
+				},
+				"surprised", {
+					textTone = "surprised";
+				}
+			);
+		};
 
 		textTone.postln;
 		^textTone;
@@ -1988,7 +1994,7 @@ Toner {
 			},
 			"neutral", {
 				presets[0].put(\rate, [1]);
-				presets[0].put(\amp, [0.5]);
+				presets[0].put(\amp, [0.3]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);

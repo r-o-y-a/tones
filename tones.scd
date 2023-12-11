@@ -15,7 +15,7 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 	//sound = PitchShift.ar(sound, 2, pitchShift);
 	// PitchShift_Ctor: alloc failed, increase server's RT memory (e.g. via ServerOptions)
 
-	//sound = Warp1.ar(1, sound, MouseX.kr(0,1), MouseY.kr(0.5,2), 0.1, -1, 8, 0.1, 2);
+	//sound = Warp1.ar(1, sound, LFSaw.ar(1/15).range(0, 1), MouseX.kr(0.5,2), 0.1, -1, 8, 0.1, 2);
 
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
@@ -30,7 +30,7 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 
 s.sync;
 
-t = Toner.new(\samplePlayer);
+t = Toner.new(\samplePlayer, true); // run offline
 }
 );
 
@@ -41,9 +41,8 @@ p = t.t("How nice everything looked on my way to school, I thought.");
 p = t.t("Suddenly, a crow flew across the horizon and startled me.");
 p = t.t("It went away but then came back again, flying in my face.");
 p = t.t("Go away! I said.");
-p = t.t("neutral");
+p = t.t("It went away this time for good and everything was fine again.");
 p = t.t("It was a cold winter day.");
-
 
 
 p.at(\p1).stop;
