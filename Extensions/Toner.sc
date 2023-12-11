@@ -138,10 +138,11 @@ Toner {
 
 		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
 		var apikey = File.readAllString(path ++ "apikey.scd");
+		var apiurl = File.readAllString(path ++ "apiurl.scd");
 
 
 		if (runOffline == false || runOffline.isNil) {
-			x = "curl -X POST https://api.sapling.ai/api/v1/tone -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
+			x = "curl -X POST "++apiurl++" -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
 			x = x.replace("\n", replace:"");
 			x = x.unixCmdGetStdOut;
 			x.postln;
