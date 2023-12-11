@@ -11,9 +11,7 @@ Toner {
 	t { | text |
 		var textTone = this.getToneFromText(text, runOffline);
 		var presets = this.getPresets(textTone);
-		if (presets == nil or: { presets == "" }) {
-			// do nothing
-		} {
+		if (presets != nil && { presets != "" }) {
 			var patterns = this.playPatterns(presets, synthdef);
 			^patterns;
 		}
@@ -153,8 +151,7 @@ Toner {
 			//d["results"][0][1][1].postln; // secondary tone
 			//d["results"][0][2][1].postln; // tertiary tone
 
-		}
-		{
+		}{
 			// code for when i get rate-limited from the API :I
 			switch(text,
 				"It was a cold winter day.", {
@@ -271,8 +268,6 @@ Toner {
 
     getPresets { | textTone |
 		presets = [Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new];
-		//case {if("admiring" or: {"amused"})} {alskdjf}
-		//case {if("admiring" or: {"amused"})} {alskdjf}
 		switch(textTone,
 			"admiring", {
 				presets[0].put(\rate, [0]);
