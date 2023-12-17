@@ -32,8 +32,8 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 
 s.sync;
 
-//t = Toner.new(\samplePlayer, true); // run offline
-t = Toner.new(\samplePlayer);
+t = Toner.new(\samplePlayer, true); // run offline
+//t = Toner.new(\samplePlayer);
 }
 );
 
