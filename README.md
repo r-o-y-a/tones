@@ -1,4 +1,4 @@
-Tones uses sentiment ananlysis for text classification and returns music based on the tone.
+Tones uses sentiment analysis for text classification and returns music based on the tone.
 It is meant to be performed as live-coding.
 
 
