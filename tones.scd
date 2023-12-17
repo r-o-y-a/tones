@@ -1,9 +1,10 @@
 (
 s.waitForBoot {
 
+~rate = [];
+
 a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
-//a[0].play;
 
 SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
 
@@ -14,6 +15,7 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 
 	//sound = PitchShift.ar(sound, 2, pitchShift);
 	// PitchShift_Ctor: alloc failed, increase server's RT memory (e.g. via ServerOptions)
+	//sound = PitchShift.ar(sound, 0.5, 1, 0, 0.01);
 
 	//sound = Warp1.ar(1, sound, LFSaw.ar(1/15).range(0, 1), MouseX.kr(0.5,2), 0.1, -1, 8, 0.1, 2);
 
@@ -30,9 +32,13 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
 
 s.sync;
 
-t = Toner.new(\samplePlayer, true); // run offline
+//t = Toner.new(\samplePlayer, true); // run offline
+t = Toner.new(\samplePlayer);
 }
 );
+
+
+
 
 
 p = t.t("It was a cold winter day.");
@@ -50,8 +56,6 @@ p.at(\p2).stop;
 p.at(\p3).stop;
 p.at(\p4).stop;
 p.at(\p5).stop;
-
-
 
 
 
@@ -136,6 +140,14 @@ y.stop;
 
 
 
+p = t.t("It was a cold winter day.");
+p = t.t("But the sun was shining.");
+p = t.t("How nice everything looked on my way to school, I thought.");
+p = t.t("Suddenly, a crow flew across the horizon and startled me.");
+p = t.t("It went away but then came back again, flying in my face.");
+p = t.t("Go away! I said.");
+p = t.t("It went away this time for good and everything was fine again.");
+p = t.t("It was a cold winter day.");
 
 
 
