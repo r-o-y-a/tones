@@ -4,6 +4,8 @@ It is meant to be performed in a live-coding situation.
 
 How to Run (OSX):
 
+No API necessary, this will run locally based on hard-coded text.
+
 - Install SuperCollider
 - Copy Extensions/Toner.sc to ~/Library/Application Support/SuperCollider/Extensions
 - In tones.scd, make sure to run it offline: t = Toner.new(\samplePlayer, true);
