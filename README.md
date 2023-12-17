@@ -9,7 +9,7 @@ How to Run (OSX):
 - In tones.scd, make sure to run it offline: t = Toner.new(\samplePlayer, true);
 - Run the first block (buffer/synthdef)
 - Run a few test phrases:
-- p = t.t("It was a cold winter day.");
-- p = t.t("But the sun was shining.");
-- p = t.t("Go away! I said.");
+- p = t.t("It was a cold winter day."); // sad
+- p = t.t("But the sun was shining."); // neutral
+- p = t.t("Go away! I said."); // angry
 - 5 synths should be loaded with each text, these can be steered individually.
