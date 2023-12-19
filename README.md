@@ -10,7 +10,7 @@ No API necessary, this will run locally based on hard-coded text.
 - Copy Extensions/Toner.sc to ~/Library/Application Support/SuperCollider/Extensions
 - In tones.scd, make sure to run it offline: t = Toner.new(\samplePlayer, true);
 - Run the first block (buffer/synthdef)
-- Run a few hard-coded test phrases (non-hardcoded phrases will default to "sad"):
+- Run a few hard-coded test phrases (non-hardcoded phrases will default to "sadness"):
 - p = t.t("It was a cold depressing winter day."); // sadness
 - p = t.t("But the sun was shining."); // neutral
 - p = t.t("Go away! I said."); // anger
