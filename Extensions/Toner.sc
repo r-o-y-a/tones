@@ -136,21 +136,11 @@ Toner {
 		var x, textTone;
 
 		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
-		var apikey = File.readAllString(path ++ "apikey.scd");
-		var apiurl = File.readAllString(path ++ "apiurl.scd");
+		var cmd = File.readAllString(path ++ "getDataCommand.txt");
 
-		if ((apikey != nil) && (apiurl != nil)) {
-			x = "curl -X POST "++apiurl++" -H \"Content-Type: application/json\" \ -d \'{\"key\":\"" ++apikey++"\", \"text\":\"" ++ text ++ "\"}\'";
-			x = x.replace("\n", replace:"");
-			x = x.unixCmdGetStdOut;
-			x.postln;
-			x = x.escapeChar($");
-			x = x.replace("\\", replace:"");
-			x = x.parseJSON;
-			textTone = x["results"][0][0][1];
-			//d["results"][0][1][1].postln; // secondary tone
-			//d["results"][0][2][1].postln; // tertiary tone
-		};
+		x = (cmd + "\"" ++ text ++ "\"");
+		x = x.unixCmdGetStdOut;
+		textTone = x.replace("\n", replace:"");
 
 		^textTone;
 	}
@@ -162,114 +152,114 @@ Toner {
 			textTone = this.getToneFromApi(text);
 		};
 
+		// run offline
 		if (textTone == nil) {
-			// code for when i get rate-limited from the API :I
 			switch(text,
 				"It was a cold winter day.", {
-					textTone = "sad";
+					textTone = "sadness";
 				},
 				"But the sun was shining.", {
 					textTone = "neutral";
 				},
 				"How nice everything looked on my way to school, I thought.", {
-					textTone = "admiring";
+					textTone = "admiration";
 				},
 				"Suddenly, a crow flew across the horizon and startled me.", {
-					textTone = "surprised";
+					textTone = "surprise";
 				},
 				"It went away but then came back again, flying in my face.", {
-					textTone = "annoyed";
+					textTone = "annoyance";
 				},
 				"Go away! I said.", {
-					textTone = "angry";
+					textTone = "anger";
 				},
 				"It went away this time for good and everything was fine again.", {
-					textTone = "relieved";
+					textTone = "relief";
 				},
-				"admiring", {
-					textTone = "admiring";
+				"admiration", {
+					textTone = "admiration";
 				},
-				"amused", {
-					textTone = "amused";
+				"amusement", {
+					textTone = "amusement";
 				},
-				"eager", {
-					textTone = "eager";
+				"anger", {
+					textTone = "anger";
 				},
-				"excited", {
-					textTone = "excited";
+				"annoyance", {
+					textTone = "annoyance";
 				},
-				"grateful", {
-					textTone = "grateful";
+				"approval", {
+					textTone = "approval";
 				},
-				"joyful", {
-					textTone = "joyful";
+				"caring", {
+					textTone = "caring";
 				},
-				"loving", {
-					textTone = "loving";
+				"confusion", {
+					textTone = "confusion";
 				},
-				"approving", {
-					textTone = "approving";
+				"curiosity", {
+					textTone = "curiosity";
 				},
-				"angry", {
-					textTone = "angry";
+				"desire", {
+					textTone = "desire";
 				},
-				"annoyed", {
-					textTone = "annoyed";
+				"disappointment", {
+					textTone = "disappointment";
 				},
-				"disappointed", {
-					textTone = "disappointed";
+				"disapproval", {
+					textTone = "disapproval";
 				},
-				"disapproving", {
-					textTone = "disapproving";
+				"disgust", {
+					textTone = "disgust";
 				},
-				"repulsed", {
-					textTone = "repulsed";
+				"embarrassment", {
+					textTone = "embarrassment";
 				},
-				"sad", {
-					textTone = "sad";
+				"excitement", {
+					textTone = "excitement";
 				},
-				"mournful", {
-					textTone = "mournful";
+				"fear", {
+					textTone = "fear";
 				},
-				"sympathetic", {
-					textTone = "sympathetic";
+				"gratitude", {
+					textTone = "gratitude";
 				},
-				"worried", {
-					textTone = "worried";
+				"grief", {
+					textTone = "grief";
 				},
-				"remorseful", {
-					textTone = "remorseful";
+				"joy", {
+					textTone = "joy";
 				},
-				"embarassed", {
-					textTone = "embarassed";
+				"love", {
+					textTone = "love";
 				},
-				"fearful", {
-					textTone = "fearful";
+				"nervousness", {
+					textTone = "nervousness";
 				},
-				"confused", {
-					textTone = "confused";
+				"optimism", {
+					textTone = "optimism";
 				},
-				"relieved", {
-					textTone = "relieved";
+				"pride", {
+					textTone = "pride";
 				},
-				"aware", {
-					textTone = "aware";
+				"realization", {
+					textTone = "realization";
 				},
-				"confident", {
-					textTone = "confident";
+				"relief", {
+					textTone = "relief";
 				},
-				"curious", {
-					textTone = "curious";
+				"remorse", {
+					textTone = "remorse";
+				},
+				"sadness", {
+					textTone = "sadness";
+				},
+				"surprise", {
+					textTone = "surprise";
 				},
 				"neutral", {
 					textTone = "neutral";
 				},
-				"optimistic", {
-					textTone = "optimistic";
-				},
-				"surprised", {
-					textTone = "surprised";
-				}
 			);
 		};
 
@@ -284,7 +274,7 @@ Toner {
     getPresets { | textTone |
 		presets = [Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new];
 		switch(textTone,
-			"admiring", {
+			"admiration", {
 				~rate = [[0], [0], [3], [1, 2, 1.5, 3, 1], [3]];
 
 				presets[0].put(\amp, [0.4]);
@@ -352,7 +342,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"amused", {
+			"amusement", {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -416,7 +406,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"eager", {
+			"desire", {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -480,7 +470,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"excited", {
+			"excitement", {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -544,7 +534,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"grateful", {
+			"gratitude", {
 				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -611,7 +601,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"joyful", {
+			"joy", {
 				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -678,7 +668,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"loving", {
+			"love", {
 				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -745,7 +735,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"approving", {
+			"approval", {
 				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -812,8 +802,9 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"angry", {
-				presets[0].put(\rate, [0.5, 0.2, 0.4]);
+			"anger", {
+				~rate = [[0.5, 0.2, 0.4], [1], [0.2], [1], [1]];
+
 				presets[0].put(\amp, [0.8]);
 				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
@@ -827,7 +818,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [1]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 4);
@@ -841,7 +831,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [0.2]);
 				presets[2].put(\amp, [0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -855,7 +844,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 6);
 
-				presets[3].put(\rate, [1]);
 				presets[3].put(\amp, [0.2]);
 				presets[3].put(\filterFreq, 3000);
 				presets[3].put(\filterRes, 4);
@@ -869,7 +857,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [1]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 3000);
 				presets[4].put(\filterRes, 4);
@@ -883,8 +870,9 @@ Toner {
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
 			},
-			"annoyed", {
-				presets[0].put(\rate, [1]);
+			"annoyance", {
+				~rate = [[1], [1], [5, 6, 8], [1], [1]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
@@ -898,7 +886,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [1]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\filterFreq, 1500);
 				presets[1].put(\filterRes, 3);
@@ -912,7 +899,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [5, 6, 8]);
 				presets[2].put(\amp, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -926,7 +912,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [1]);
 				presets[3].put(\amp, [0.5]);
 				presets[3].put(\filterFreq, 500);
 				presets[3].put(\filterRes, 3);
@@ -940,7 +925,6 @@ Toner {
 				presets[3].put(\delayTime, 0.1);
 				presets[3].put(\decayTime, 4);
 
-				presets[4].put(\rate, [1]);
 				presets[4].put(\amp, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 0.5, 0.4, 0.3, 0.2, 0.1]);
 				presets[4].put(\filterFreq, 2000);
 				presets[4].put(\filterRes, 4);
@@ -955,7 +939,7 @@ Toner {
 				presets[4].put(\decayTime, 0);
 
 			},
-			"disappointed", {
+			"disappointment", {
 				presets[0].put(\rate, [2.7, 2.5, 2.9, 2.6]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
@@ -1026,7 +1010,7 @@ Toner {
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
 			},
-			"disapproving", {
+			"disapproval", {
 				presets[0].put(\rate, [0.5, 0.2, 0.4]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
@@ -1097,7 +1081,7 @@ Toner {
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
 			},
-			"repulsed", {
+			"disgust", {
 				presets[0].put(\rate, [0.5, 0.2, 0.4]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
@@ -1168,7 +1152,7 @@ Toner {
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
 			},
-			"sad", {
+			"sadness", {
 				~rate = [[1], [1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1236,7 +1220,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"mournful", {
+			"grief", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1304,7 +1288,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"sympathetic", {
+			"caring", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1372,7 +1356,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"worried", {
+			"nervousness", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1440,7 +1424,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"remorseful", {
+			"remorse", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1508,7 +1492,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"embarassed", {
+			"embarrassment", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1576,7 +1560,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"fearful", {
+			"fear", {
 				presets[0].put(\rate, [2.7, 2.5, 2.9, 2.6]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
@@ -1645,7 +1629,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"confused", {
+			"confusion", {
 				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1716,8 +1700,9 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"relieved", {
-				presets[0].put(\rate, [2.7, 2.5, 2.9, 2.6]);
+			"relief", {
+				~rate = [[2.7, 2.5, 2.9, 2.6], [1], [1], [1], [1]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
@@ -1731,7 +1716,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [1]);
 				presets[1].put(\amp, [0.5]);
 				presets[1].put(\filterFreq, 1500);
 				presets[1].put(\filterRes, 3);
@@ -1745,7 +1729,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1759,7 +1742,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [1]);
 				presets[3].put(\amp, [0.5]);
 				presets[3].put(\filterFreq, 500);
 				presets[3].put(\filterRes, 3);
@@ -1773,7 +1755,6 @@ Toner {
 				presets[3].put(\delayTime, 0.1);
 				presets[3].put(\decayTime, 4);
 
-				presets[4].put(\rate, [1]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 1500);
 				presets[4].put(\filterRes, 3);
@@ -1787,7 +1768,7 @@ Toner {
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
 			},
-			"aware", {
+			"realization", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1854,7 +1835,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"confident", {
+			"pride", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -1921,7 +1902,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"curious", {
+			"curiosity", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -2056,7 +2037,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"optimistic", {
+			"optimism", {
 				presets[0].put(\rate, [1]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
@@ -2123,7 +2104,7 @@ Toner {
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
 			},
-			"surprised", {
+			"surprise", {
 				~rate = [[3.3, 3.7, 3.1, 3.9], [0], [2.9], [0], [3]];
 
 				presets[0].put(\amp, [0.5, 0.4, 0.2]);
