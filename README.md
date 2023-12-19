@@ -11,7 +11,7 @@ No API necessary, this will run locally based on hard-coded text.
 - In tones.scd, make sure to run it offline: t = Toner.new(\samplePlayer, true);
 - Run the first block (buffer/synthdef)
 - Run a few hard-coded test phrases (non-hardcoded phrases will default to "sad"):
-- p = t.t("It was a cold winter day."); // sad
+- p = t.t("It was a cold depressing winter day."); // sadness
 - p = t.t("But the sun was shining."); // neutral
-- p = t.t("Go away! I said."); // angry
+- p = t.t("Go away! I said."); // anger
 - 5 synths should be loaded with each text, these can be steered individually.
