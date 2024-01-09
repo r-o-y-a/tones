@@ -37,6 +37,29 @@ t = Toner.new(\samplePlayer);
 }
 );
 
+(
+var textTones = [1, 2, 3, 4, 5];
+var tempo = 120;
+
+var osc = NetAddr("127.0.0.1", 57121);
+var oscPath = "/data";
+
+
+fork {
+    inf.do {
+        tempo = TempoClock.default.tempo;
+		osc.sendMsg(oscPath, textTones);
+		"ok".postln;
+        2.wait; // todo: change this to the actual clock
+    }
+};
+)
+
+
+(
+b = NetAddr.new("127.0.0.1", 57121);
+b.sendMsg("/data", "beat");
+)
 
 p = t.t("It was a cold depressing winter day.");
 p = t.t("But the sun was shining.");
