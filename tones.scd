@@ -6,7 +6,7 @@ s.waitForBoot {
 a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 
-SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
+SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
@@ -30,10 +30,34 @@ SynthDef(\samplePlayer, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filter
     Out.ar(0, sound);
 }).add;
 
+SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
+
+    var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
+    var playbackRate = rate * lfo;
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0);
+	sound = sound *  amp;
+
+	// delay
+	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
+
+	sound = LPF.ar(sound, filterFreq, filterRes);
+    //sound = HPF.ar(sound, filterFreq, filterRes); // test
+	sound = FreeVerb.ar(sound, 0.5, reverbMix) *0.1;
+	DetectSilence.ar(sound, doneAction: 2);
+
+    Out.ar(0, sound);
+}).add;
+
+
+
+
+
+
+
 s.sync;
 
-//t = Toner.new(\samplePlayer, true); // run offline
-t = Toner.new(\samplePlayer);
+//t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
+t = Toner.new(\samplePlayer1, \samplePlayer2);
 }
 );
 
@@ -42,8 +66,8 @@ t = Toner.new(\samplePlayer);
 // static sample
 (
 h = Pdef(\pSample6, Pmono(
-    \samplePlayer,
-    \bufnum, ~buffers[3].bufnum,
+    \samplePlayer1,
+    \bufnum, ~buffers[7].bufnum,
 	\rate, 1,
 	\lfoFreq, 0, //1
     \amp, 1,
@@ -61,18 +85,20 @@ h.play;
 h.stop;
 
 
+p = t.t("hello", 0); // 0 to indicate do not play secondary synths
+
 
 
 // "America" - Allen Ginsberg
-p = t.t("America I have given you all and now I am nothing."); // disapointment, annoyance, gratitude
-p = t.t("America two dollars and twentyseven cents January 17, 1956."); // neutral, approval
-p = t.t("I can’t stand my own mind."); // disapproval, anger, annoyance, neutral, disappointment
-p = t.t("America when will we end the human war?"); // curiosity, confusion
-p = t.t("Go fuck yourself with your atom bomb."); // anger, neutral, fear
-// ------- static sample change
-p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief, neutral
+p = t.t("America I have given you all and now I am nothing.", 0); // disappointment, gratitude
+p = t.t("America two dollars and twentyseven cents January 17, 1956.", 0); // neutral, approval
+p = t.t("I can’t stand my own mind.", 0); // disapproval, anger, annoyance, neutral, disappointment
+p = t.t("America when will we end the human war?", 0); // curiosity, confusion
+p = t.t("Go fuck yourself with your atom bomb.", 0); // anger, neutral, fear
+// ------- static sample change, add secondary tone
+p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief
 p = t.t("I won’t write my poem till I’m in my right mind."); // realization, neutral, disapproval
-p = t.t("America when will you be angelic?"); // curiosity
+p = t.t("America when will you be angelic?"); // curiosity, admiration
 p = t.t("When will you take off your clothes?"); // neutral, curiosity, annoyance
 p = t.t("When will you look at yourself through the grave?"); // neutral, curiosity, confusion
 p = t.t("When will you be worthy of your million Trotskyites?"); //curiosity, confusion, annoyance
@@ -112,7 +138,7 @@ p = t.t("I’m obsessed by Time Magazine."); // desire, approval, love
 p = t.t("I read it every week."); // neutral, approval
 p = t.t("Its cover stares at me every time I slink past the corner candystore."); // neutral, annoyance
 p = t.t("I read it in the basement of the Berkeley Public Library."); // neutral, approval, realization
-p = t.t("It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me."); // neutral, annoynce, realization
+p = t.t("It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me."); // neutral, annoyance, realization
 p = t.t("It occurs to me that I am America."); // realization, neutral
 p = t.t("I am talking to myself again."); // neutral
 
@@ -125,6 +151,9 @@ p.at(\p2).stop;
 p.at(\p3).stop;
 p.at(\p4).stop;
 p.at(\p5).stop;
+
+p.at(\p2nd1).stop; // secondary tone 1
+p.at(\p2nd2).stop; // secondary tone 2
 
 
 

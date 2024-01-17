@@ -17,12 +17,13 @@ result = subprocess.run(curl_command, shell=True, capture_output=True, text=True
 
 if result.returncode == 0:
     json_response = json.loads(result.stdout)
-    tone = json_response.get('data', [{}])[0].get('confidences', [{}])[0].get('label', None)
+    data = json_response.get('data', [{}])[0].get('confidences', [{}])[:2] # modify to 3 to add the tertiary text tone
+    tones = ','.join(item.get('label', None) for item in data)
 
-    if tone is not None:
-        print(tone)
+    if tones is not None:
+        print(tones)
     else:
-        print("neutral")
+        print("neutral, neutral")
 else:
-    print("neutral")
+    print("neutral, neutral")
 

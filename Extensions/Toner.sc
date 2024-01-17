@@ -1,28 +1,44 @@
 Toner {
 
-	var synthdef, runOffline = false;
-	var presets, patterns;
+	var synthdef, synthdef2, runOffline = false;
+	var presets, secondaryPresets, allPresets, patterns;
 
     *new {
-        arg synthDef, runOffline;
-		^super.newCopyArgs(synthDef, runOffline);
+        arg synthDef, synthDef2, runOffline;
+		^super.newCopyArgs(synthDef, synthDef2, runOffline);
     }
 
-	t { | text |
-		var textTone = this.getToneFromText(text, runOffline);
-		var presets = this.getPresets(textTone);
+	t { | text, doNotPlaySecondary |
+		var allPresets, patterns;
+		var primaryTextTone, secondaryTextTone;
+		var textTones = this.getTonesFromText(text, runOffline, doNotPlaySecondary);
 
-		if (presets != nil && { presets != "" }) {
-			var patterns = this.playPatterns(presets, synthdef);
+		var tones = textTones.split($,);
+		primaryTextTone = tones[0];
+		secondaryTextTone = tones[1];
+
+		allPresets = this.getPresets(primaryTextTone, secondaryTextTone);
+
+		if (allPresets != nil) {
+			if (doNotPlaySecondary == 0) {
+				patterns = this.playPatterns(allPresets, synthdef, synthdef2, 0);
+			} {
+				patterns = this.playPatterns(allPresets, synthdef, synthdef2);
+			};
+
 			^patterns;
 		}
 	}
 
 	/* -- private methods -- */
 
-	playPatterns { | presets, synthdef |
+	playPatterns { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
 		var p1, p2, p3, p4, p5;
+		var p2nd1, p2nd2;
 		var patterns = Dictionary.new;
+
+		var primaryPresets = allPresets[0];
+		var secondaryPresets = allPresets[1];
 
 
 		p1 = Pdef(\pSample1,
@@ -30,16 +46,16 @@ Toner {
 				synthdef,
 				\bufnum, ~buffers[0].bufnum,
 				\rate, Pseq(~rate[0], inf),
-				\lfoFreq, Pseq([ Pfunc { presets[0].at(\lfoPseqValue) }], inf),
-				\amp, Pseq(presets[0].at(\amp), inf),
-				\filterFreq, presets[0].at(\filterFreq),
-				\filterRes, presets[0].at(\filterRes),
-				\loop, presets[0].at(\loop),
-				\reverbMix, presets[0].at(\reverbMix),
-				\pitchShift, presets[0].at(\pitchShift),
-				\delayMaxTime, presets[0].at(\delayMaxTime),
-				\delayTime, presets[0].at(\delayTime),
-				\pitchShift, presets[0].at(\pitchShift)
+				\lfoFreq, Pseq([ Pfunc { primaryPresets[0].at(\lfoPseqValue) }], inf),
+				\amp, Pseq(primaryPresets[0].at(\amp), inf),
+				\filterFreq, primaryPresets[0].at(\filterFreq),
+				\filterRes, primaryPresets[0].at(\filterRes),
+				\loop, primaryPresets[0].at(\loop),
+				\reverbMix, primaryPresets[0].at(\reverbMix),
+				\pitchShift, primaryPresets[0].at(\pitchShift),
+				\delayMaxTime, primaryPresets[0].at(\delayMaxTime),
+				\delayTime, primaryPresets[0].at(\delayTime),
+				\pitchShift, primaryPresets[0].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p1, p1);
@@ -51,16 +67,16 @@ Toner {
 				synthdef,
 				\bufnum, ~buffers[1].bufnum,
 				\rate, Pseq(~rate[1], inf),
-				\lfoFreq, Pseq([ Pfunc { presets[1].at(\lfoPseqValue) }], inf),
-				\amp, Pseq(presets[1].at(\amp), inf),
-				\filterFreq, presets[1].at(\filterFreq),
-				\filterRes, presets[1].at(\filterRes),
-				\loop, presets[1].at(\loop),
-				\reverbMix, presets[1].at(\reverbMix),
-				\pitchShift, presets[1].at(\pitchShift),
-				\delayMaxTime, presets[1].at(\delayMaxTime),
-				\delayTime, presets[1].at(\delayTime),
-				\pitchShift, presets[1].at(\pitchShift)
+				\lfoFreq, Pseq([ Pfunc { primaryPresets[1].at(\lfoPseqValue) }], inf),
+				\amp, Pseq(primaryPresets[1].at(\amp), inf),
+				\filterFreq, primaryPresets[1].at(\filterFreq),
+				\filterRes, primaryPresets[1].at(\filterRes),
+				\loop, primaryPresets[1].at(\loop),
+				\reverbMix, primaryPresets[1].at(\reverbMix),
+				\pitchShift, primaryPresets[1].at(\pitchShift),
+				\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
+				\delayTime, primaryPresets[1].at(\delayTime),
+				\pitchShift, primaryPresets[1].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p2, p2);
@@ -71,16 +87,16 @@ Toner {
 				synthdef,
 				\bufnum, ~buffers[2].bufnum,
 				\rate, Pseq(~rate[2], inf),
-				\lfoFreq, Pseq([ Pfunc { presets[2].at(\lfoPseqValue) }], inf),
-				\amp, Pseq(presets[2].at(\amp), inf),
-				\filterFreq, presets[2].at(\filterFreq),
-				\filterRes, presets[2].at(\filterRes),
-				\loop, presets[2].at(\loop),
-				\reverbMix, presets[2].at(\reverbMix),
-				\pitchShift, presets[2].at(\pitchShift),
-				\delayMaxTime, presets[2].at(\delayMaxTime),
-				\delayTime, presets[2].at(\delayTime),
-				\pitchShift, presets[2].at(\pitchShift)
+				\lfoFreq, Pseq([ Pfunc { primaryPresets[2].at(\lfoPseqValue) }], inf),
+				\amp, Pseq(primaryPresets[2].at(\amp), inf),
+				\filterFreq, primaryPresets[2].at(\filterFreq),
+				\filterRes, primaryPresets[2].at(\filterRes),
+				\loop, primaryPresets[2].at(\loop),
+				\reverbMix, primaryPresets[2].at(\reverbMix),
+				\pitchShift, primaryPresets[2].at(\pitchShift),
+				\delayMaxTime, primaryPresets[2].at(\delayMaxTime),
+				\delayTime, primaryPresets[2].at(\delayTime),
+				\pitchShift, primaryPresets[2].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p3, p3);
@@ -92,16 +108,16 @@ Toner {
 				synthdef,
 				\bufnum, ~buffers[3].bufnum,
 				\rate, Pseq(~rate[3], inf),
-				\lfoFreq, Pseq([ Pfunc { presets[3].at(\lfoPseqValue) }], inf),
-				\amp, Pseq(presets[3].at(\amp), inf),
-				\filterFreq, presets[3].at(\filterFreq),
-				\filterRes, presets[3].at(\filterRes),
-				\loop, presets[3].at(\loop),
-				\reverbMix, presets[3].at(\reverbMix),
-				\pitchShift, presets[3].at(\pitchShift),
-				\delayMaxTime, presets[3].at(\delayMaxTime),
-				\delayTime, presets[3].at(\delayTime),
-				\pitchShift, presets[3].at(\pitchShift)
+				\lfoFreq, Pseq([ Pfunc { primaryPresets[3].at(\lfoPseqValue) }], inf),
+				\amp, Pseq(primaryPresets[3].at(\amp), inf),
+				\filterFreq, primaryPresets[3].at(\filterFreq),
+				\filterRes, primaryPresets[3].at(\filterRes),
+				\loop, primaryPresets[3].at(\loop),
+				\reverbMix, primaryPresets[3].at(\reverbMix),
+				\pitchShift, primaryPresets[3].at(\pitchShift),
+				\delayMaxTime, primaryPresets[3].at(\delayMaxTime),
+				\delayTime, primaryPresets[3].at(\delayTime),
+				\pitchShift, primaryPresets[3].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p4, p4);
@@ -113,47 +129,96 @@ Toner {
 				synthdef,
 				\bufnum, ~buffers[4].bufnum,
 				\rate, Pseq(~rate[4], inf),
-				\lfoFreq, Pseq([ Pfunc { presets[4].at(\lfoPseqValue) }], inf),
-				\amp, Pseq(presets[4].at(\amp), inf),
-				\filterFreq, presets[4].at(\filterFreq),
-				\filterRes, presets[4].at(\filterRes),
-				\loop, presets[4].at(\loop),
-				\reverbMix, presets[4].at(\reverbMix),
-				\pitchShift, presets[4].at(\pitchShift),
-				\delayMaxTime, presets[4].at(\delayMaxTime),
-				\delayTime, presets[4].at(\delayTime),
-				\pitchShift, presets[4].at(\pitchShift)
+				\lfoFreq, Pseq([ Pfunc { primaryPresets[4].at(\lfoPseqValue) }], inf),
+				\amp, Pseq(primaryPresets[4].at(\amp), inf),
+				\filterFreq, primaryPresets[4].at(\filterFreq),
+				\filterRes, primaryPresets[4].at(\filterRes),
+				\loop, primaryPresets[4].at(\loop),
+				\reverbMix, primaryPresets[4].at(\reverbMix),
+				\pitchShift, primaryPresets[4].at(\pitchShift),
+				\delayMaxTime, primaryPresets[4].at(\delayMaxTime),
+				\delayTime, primaryPresets[4].at(\delayTime),
+				\pitchShift, primaryPresets[4].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p5, p5);
 		p5.play;
 
 
+
+		// --- secondary synths ----
+
+		if (doNotPlaySecondary != 0) {
+
+			p2nd1 = Pdef(\pSample2nd1,
+				Pmono(
+					synthdef2,
+					\bufnum, ~buffers[5].bufnum,
+					\rate, Pseq(~secondaryRate[0], inf),
+					\lfoFreq, Pseq([ Pfunc { secondaryPresets[0].at(\lfoPseqValue) }], inf),
+					\amp, Pseq(secondaryPresets[0].at(\amp), inf),
+					\filterFreq, secondaryPresets[0].at(\filterFreq),
+					\filterRes, secondaryPresets[0].at(\filterRes),
+					\loop, secondaryPresets[0].at(\loop),
+					\reverbMix, secondaryPresets[0].at(\reverbMix),
+					\pitchShift, secondaryPresets[0].at(\pitchShift),
+					\delayMaxTime, secondaryPresets[0].at(\delayMaxTime),
+					\delayTime, secondaryPresets[0].at(\delayTime),
+					\pitchShift, secondaryPresets[0].at(\pitchShift)
+				)
+			);
+			patterns.put(\p2nd1, p2nd1);
+			p2nd1.play;
+
+			p2nd2 = Pdef(\pSample2nd2,
+				Pmono(
+					synthdef2,
+					\bufnum, ~buffers[6].bufnum,
+					\rate, Pseq(~secondaryRate[1], inf),
+					\lfoFreq, Pseq([ Pfunc { primaryPresets[1].at(\lfoPseqValue) }], inf),
+					\amp, Pseq(primaryPresets[1].at(\amp), inf),
+					\filterFreq, primaryPresets[1].at(\filterFreq),
+					\filterRes, primaryPresets[1].at(\filterRes),
+					\loop, primaryPresets[1].at(\loop),
+					\reverbMix, primaryPresets[1].at(\reverbMix),
+					\pitchShift, primaryPresets[1].at(\pitchShift),
+					\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
+					\delayTime, primaryPresets[1].at(\delayTime),
+					\pitchShift, primaryPresets[1].at(\pitchShift)
+				)
+			);
+			patterns.put(\p2nd2, p2nd2);
+			p2nd2.play;
+		};
+
+
 		^patterns;
 	}
 
-	getToneFromApi { | text |
-		var x, textTone;
+	getTonesFromApi { | text |
+		var x, textTones;
 
 		var path = PathName(thisProcess.nowExecutingPath).pathOnly;
 		var cmd = File.readAllString(path ++ "getDataCommand.txt");
 
 		x = (cmd + "\"" ++ text ++ "\"");
 		x = x.unixCmdGetStdOut;
-		textTone = x.replace("\n", replace:"");
+		textTones = x.replace("\n", replace:"");
 
-		^textTone;
+		^textTones;
 	}
 
-	getToneFromText { | text, runOffline |
-		var textTone;
+	getTonesFromText { | text, runOffline, doNotPlaySecondary |
+		var textTones;
+		var textTone, secondaryTextTone;
+
 
 		if (runOffline == false || runOffline.isNil) {
-			textTone = this.getToneFromApi(text);
+			textTones = this.getTonesFromApi(text);
 		};
 
-		// run offline
-		if (textTone == nil) {
+		// run offline -- TODO: add secondary text tone
+		if (textTones == nil) {
 			switch(text,
 				"It was a cold depressing winter day.", {
 					textTone = "sadness";
@@ -263,18 +328,28 @@ Toner {
 			);
 		};
 
-		if (textTone == nil) {
-			textTone = "sad";
-		};
 
-		textTone.postln;
-		^textTone;
+
+		if (doNotPlaySecondary == 0) {
+			textTones.split($,)[0].postln;
+		} {
+			textTones.postln;
+		}
+
+
+		^textTones;
 	}
 
-    getPresets { | textTone |
+	// each tone has a both a primary and secondary preset (for when it is accompanying a primary)
+    getPresets { | textTone, secondaryTextTone |
 		presets = [Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new, Dictionary.new];
-		switch(textTone,
-			"admiration", {
+		secondaryPresets = [Dictionary.new, Dictionary.new];
+
+
+		// todo: return secondaryPresets[0], and secondaryPresets[1] for all presets
+
+
+		if (textTone == "admiration") {
 				~rate = [[1, 1, 1, 1.5, 1.5, 1, 1.5, 1, 1, 1.5, 1.5, 1.8, 2, 2, 1], [0], [3], [1, 2, 1.5, 3, 1], [3]];
 
 				presets[0].put(\amp, [0.4]);
@@ -341,8 +416,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"amusement", {
+		};
+
+		if (secondaryTextTone == "admiration") {
+			~secondaryRate = [[1, 1, 1, 1.5, 1.5, 1, 1.5, 1, 1, 1.5, 1.5, 1.8, 2, 2, 1], [0], [3], [1, 2, 1.5, 3, 1], [3]];
+
+			secondaryPresets[0].put(\amp, [0.4]);
+			secondaryPresets[0].put(\filterFreq, 1500);
+			secondaryPresets[0].put(\filterRes, 3);
+			secondaryPresets[0].put(\start, 0);
+			secondaryPresets[0].put(\end, 1);
+			secondaryPresets[0].put(\loop, 1);
+			secondaryPresets[0].put(\lfoPseqValue, 0);
+			secondaryPresets[0].put(\reverbMix, 7);
+			secondaryPresets[0].put(\pitchShift, 0);
+			secondaryPresets[0].put(\delayMaxTime, 0);
+			secondaryPresets[0].put(\delayTime, 0);
+			secondaryPresets[0].put(\decayTime, 0);
+
+			secondaryPresets[1].put(\amp, [0]);
+			secondaryPresets[1].put(\filterFreq, 1500);
+			secondaryPresets[1].put(\filterRes, 3);
+			secondaryPresets[1].put(\start, 0);
+			secondaryPresets[1].put(\end, 1);
+			secondaryPresets[1].put(\loop, 1);
+			secondaryPresets[1].put(\lfoPseqValue, 0);
+			secondaryPresets[1].put(\reverbMix, 1);
+			secondaryPresets[1].put(\pitchShift, 0);
+			secondaryPresets[1].put(\delayMaxTime, 0);
+			secondaryPresets[1].put(\delayTime, 0);
+			secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "amusement") {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -405,8 +511,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"desire", {
+			};
+
+		if (secondaryTextTone == "amusement") {
+			~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+			secondaryPresets[0].put(\amp, [0.5]);
+			secondaryPresets[0].put(\filterFreq, 1500);
+			secondaryPresets[0].put(\filterRes, 3);
+			secondaryPresets[0].put(\start, 0);
+			secondaryPresets[0].put(\end, 1);
+			secondaryPresets[0].put(\loop, 1);
+			secondaryPresets[0].put(\lfoPseqValue, 0.1);
+			secondaryPresets[0].put(\reverbMix, 7);
+			secondaryPresets[0].put(\pitchShift, 0);
+			secondaryPresets[0].put(\delayMaxTime, 0);
+			secondaryPresets[0].put(\delayTime, 0);
+			secondaryPresets[0].put(\decayTime, 0);
+
+			secondaryPresets[1].put(\amp, [0]);
+			secondaryPresets[1].put(\start, 0);
+			secondaryPresets[1].put(\end, 1);
+			secondaryPresets[1].put(\loop, 1);
+			secondaryPresets[1].put(\lfoPseqValue, 0);
+			secondaryPresets[1].put(\reverbMix, 1);
+			secondaryPresets[1].put(\pitchShift, 0);
+			secondaryPresets[1].put(\delayMaxTime, 0);
+			secondaryPresets[1].put(\delayTime, 0);
+			secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "desire") {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -469,8 +605,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"excitement", {
+			};
+
+
+		if (secondaryTextTone == "desire") {
+				~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "excitement") {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -533,9 +699,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"gratitude", {
-				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
+			};
+
+		if (secondaryTextTone == "excitement") {
+				~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "gratitude") {
+			~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -549,7 +745,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -561,7 +756,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -575,7 +769,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -587,7 +780,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -600,9 +792,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"joy", {
-				presets[0].put(\rate, [1, 2, 1.6, 3, 1.1]);
+			};
+
+		if (secondaryTextTone == "gratitude") {
+			~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "joy") {
+			~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -616,7 +838,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -628,7 +849,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -642,7 +862,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -654,7 +873,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -667,8 +885,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"love", {
+			};
+
+		if (secondaryTextTone == "joy") {
+			~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "love") {
 				~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -731,8 +979,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"approval", {
+			};
+
+		if (secondaryTextTone == "love") {
+				~secondaryRate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+
+		if (textTone == "approval") {
 				~rate = [[2, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 5], [0, 0, 0, 1.5, 1.5, 1.5, 1.5, 1.5, 1.8], [5, 6, 8], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -797,8 +1075,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"anger", {
+			};
+
+		if (secondaryTextTone == "approval") {
+				~secondaryRate = [[2, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 5], [0, 0, 0, 1.5, 1.5, 1.5, 1.5, 1.5, 1.8], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "anger") {
 				~rate = [[0.5, 0.2, 0.4], [0], [0.2], [1], [1]];
 
 				presets[0].put(\amp, [0.8]);
@@ -865,8 +1174,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
-			},
-			"annoyance", {
+			};
+
+		if (secondaryTextTone == "anger") {
+				~secondaryRate = [[0.5, 0.2, 0.4], [0], [0.2], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.8]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\filterFreq, 3000);
+				secondaryPresets[1].put(\filterRes, 4);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "annoyance") {
 				~rate = [[1], [0], [5, 6, 8], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -933,9 +1273,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
+			};
 
-			},
-			"disappointment", {
+		if (secondaryTextTone == "annoyance") {
+			~secondaryRate = [[1], [0], [5, 6, 8], [1], [1]];
+
+			secondaryPresets[0].put(\amp, [0.5]);
+			secondaryPresets[0].put(\filterFreq, 3000);
+			secondaryPresets[0].put(\filterRes, 3);
+			secondaryPresets[0].put(\start, 0);
+			secondaryPresets[0].put(\end, 1);
+			secondaryPresets[0].put(\loop, 1);
+			secondaryPresets[0].put(\lfoPseqValue, 0);
+			secondaryPresets[0].put(\reverbMix, 7);
+			secondaryPresets[0].put(\pitchShift, 0);
+			secondaryPresets[0].put(\delayMaxTime, 0);
+			secondaryPresets[0].put(\delayTime, 0);
+			secondaryPresets[0].put(\decayTime, 0);
+
+			secondaryPresets[1].put(\amp, [0]);
+			secondaryPresets[1].put(\filterFreq, 1500);
+			secondaryPresets[1].put(\filterRes, 3);
+			secondaryPresets[1].put(\start, 0);
+			secondaryPresets[1].put(\end, 1);
+			secondaryPresets[1].put(\loop, 1);
+			secondaryPresets[1].put(\lfoPseqValue, 0);
+			secondaryPresets[1].put(\reverbMix, 1);
+			secondaryPresets[1].put(\pitchShift, 0);
+			secondaryPresets[1].put(\delayMaxTime, 0);
+			secondaryPresets[1].put(\delayTime, 0);
+			secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "disappointment") {
 				~rate = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 1], [1], [5, 6, 8], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1002,8 +1372,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
-			},
-			"disapproval", {
+			};
+
+		if (secondaryTextTone == "disappointment") {
+				~secondaryRate = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 1], [1], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "disapproval") {
 				~rate = [[0.5, 0.5, 0.5, 0.5, 0.5, 0.7, 0.7, 0.7, 0.7, 0.5, 0.5, 0.5], [1], [5, 6, 8], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1070,8 +1472,42 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
-			},
-			"disgust", {
+			};
+
+		if (secondaryTextTone == "disapproval") {
+				~secondaryRate = [[0.5, 0.5, 0.5, 0.5, 0.5, 0.7, 0.7, 0.7, 0.7, 0.5, 0.5, 0.5], [1], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 3000);
+				secondaryPresets[1].put(\filterRes, 4);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "disgust") {
+			~rate = [[0.5, 0.2, 0.4], [1], [5, 6, 8], [1], [1]];
+
 				presets[0].put(\rate, [0.5, 0.2, 0.4]);
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 3000);
@@ -1141,8 +1577,42 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
-			},
-			"sadness", {
+			};
+
+
+		if (secondaryTextTone == "disgust") {
+			~secondaryRate = [[0.5, 0.2, 0.4], [1], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\rate, [0.5, 0.2, 0.4]);
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\rate, [1]);
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 3000);
+				secondaryPresets[1].put(\filterRes, 4);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "sadness") {
 				~rate = [[0.5], [6.5, 6.5, 6.5, 6.5], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1209,9 +1679,42 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"grief", {
-				presets[0].put(\rate, [1]);
+			};
+
+
+		if (secondaryTextTone == "sadness") {
+				~secondaryRate = [[0.5], [6.5, 6.5, 6.5, 6.5], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.1]);
+				secondaryPresets[1].put(\filterFreq, 800);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0.05);
+				secondaryPresets[1].put(\reverbMix, 20);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 5);
+				secondaryPresets[1].put(\delayTime, 3);
+				secondaryPresets[1].put(\decayTime, 25);
+		};
+
+		if (textTone == "grief") {
+			~rate = [[1], [0], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -1225,7 +1728,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
 				presets[1].put(\start, 0);
@@ -1238,7 +1740,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]);
 				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1252,7 +1753,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -1264,7 +1764,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -1277,8 +1776,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"caring", {
+			};
+
+		if (secondaryTextTone == "grief") {
+			~secondaryRate = [[1], [0], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\modFreq, 0.5);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+
+		if (textTone == "caring") {
 				~rate = [[1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 1.8, 1.8, 1.8, 1.8, 1.7, 1.7, 1.7, 1.7],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1343,9 +1874,41 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"nervousness", {
-				presets[0].put(\rate, [1]);
+			};
+
+		if (secondaryTextTone == "caring") {
+				~secondaryRate = [[1, 1, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 1.5, 1.8, 1.8, 1.8, 1.8, 1.7, 1.7, 1.7, 1.7],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "nervousness") {
+			~rate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -1359,7 +1922,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
 				presets[1].put(\start, 0);
@@ -1372,7 +1934,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]);
 				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1386,7 +1947,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -1398,7 +1958,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -1411,9 +1970,41 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"remorse", {
-				presets[0].put(\rate, [1]);
+			};
+
+		if (secondaryTextTone == "nervousness") {
+			~secondaryRate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\modFreq, 0.5);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "remorse") {
+			~rate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -1427,7 +2018,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
 				presets[1].put(\start, 0);
@@ -1440,7 +2030,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]);
 				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1454,7 +2043,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -1466,7 +2054,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -1479,9 +2066,42 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"embarrassment", {
-				presets[0].put(\rate, [1]);
+			};
+
+
+		if (secondaryTextTone == "remorse") {
+			~secondaryRate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\modFreq, 0.5);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "embarrassment") {
+			~rate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -1495,7 +2115,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\modFreq, 0.5);
 				presets[1].put(\start, 0);
@@ -1508,7 +2127,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0]);
 				presets[2].put(\amp, [0.5, 0.3, 0.4, 0.1, 0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1522,7 +2140,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -1534,7 +2151,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -1547,8 +2163,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"fear", {
+			};
+
+		if (secondaryTextTone == "embarrassment") {
+			~secondaryRate = [[1],[1], [1.0, 0.5, 1.5, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0], [1], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\modFreq, 0.5);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+
+		if (textTone == "fear") {
 				~rate = [[1.3, 1.24, 1.24, 1.24, 1.24, 1.24, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8], [0], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1613,8 +2261,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"confusion", {
+			};
+
+		if (secondaryTextTone == "fear") {
+				~secondaryRate = [[1.3, 1.24, 1.24, 1.24, 1.24, 1.24, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8], [0], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "confusion") {
 				~rate = [[1, 2, 1.6, 3, 1.1], [1], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1681,8 +2360,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"relief", {
+			};
+
+		if (secondaryTextTone == "confusion") {
+				~secondaryRate = [[1, 2, 1.6, 3, 1.1], [1], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "relief") {
 				~rate = [[2.7, 2.5, 2.9, 2.6], [1], [1], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1749,8 +2459,39 @@ Toner {
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
 				presets[4].put(\decayTime, 0);
-			},
-			"realization", {
+			};
+
+		if (secondaryTextTone == "relief") {
+				~secondaryRate = [[2.7, 2.5, 2.9, 2.6], [1], [1], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 3000);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "realization") {
 				~rate = [[3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 4.5], [1.5, 2.5, 2.5, 2.5, 2.5, 3.5], [5, 6, 8], [1], [1]];
 
 
@@ -1816,9 +2557,43 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"pride", {
-				presets[0].put(\rate, [1]);
+			};
+
+		if (secondaryTextTone == "realization") {
+				~secondaryRate = [[3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 4.5], [1.5, 2.5, 2.5, 2.5, 2.5, 3.5], [5, 6, 8], [1], [1]];
+
+
+				secondaryPresets[0].put(\amp, [0.3]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.3]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+
+		if (textTone == "pride") {
+			~secondaryRate = [[1], [1.5, 2.5, 2.5, 2.5, 2.5, 3.5], [5, 6, 8], [1], [1]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -1832,7 +2607,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -1844,7 +2618,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -1858,7 +2631,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -1870,7 +2642,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -1883,8 +2654,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"curiosity", {
+			};
+
+		if (secondaryTextTone == "pride") {
+			~secondaryRate = [[1], [1.5, 2.5, 2.5, 2.5, 2.5, 3.5], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "curiosity") {
 				~rate = [[2.5, 2.5, 2.5, 3, 3, 2.5, 3.8, 3.8, 2.5], [2, 2, 2, 2, 2, 2, 3, 3, 3], [5, 6, 8], [1], [1]];
 
 				presets[0].put(\amp, [0.5]);
@@ -1949,8 +2750,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"neutral", {
+			};
+
+
+		if (secondaryTextTone == "curiosity") {
+				~secondaryRate = [[2.5, 2.5, 2.5, 3, 3, 2.5, 3.8, 3.8, 2.5], [2, 2, 2, 2, 2, 2, 3, 3, 3], [5, 6, 8], [1], [1]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.5]);
+				secondaryPresets[1].put(\filterFreq, 3000);
+				secondaryPresets[1].put(\filterRes, 1);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 10);
+				secondaryPresets[1].put(\delayTime, 5);
+				secondaryPresets[1].put(\decayTime, 5);
+		};
+
+		if (textTone == "neutral") {
 				~rate = [[2.5], [1], [3], [0], [3]];
 
 				presets[0].put(\amp, [0.3]);
@@ -2017,9 +2850,43 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"optimism", {
-				presets[0].put(\rate, [1]);
+			};
+
+
+		if (secondaryTextTone == "neutral") {
+				~secondaryRate = [[2.5], [1], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.3]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0.1]);
+				secondaryPresets[1].put(\filterFreq, 1500);
+				secondaryPresets[1].put(\filterRes, 3);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "optimism") {
+			~rate = [[1], [1], [3], [0], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -2033,7 +2900,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -2045,7 +2911,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -2059,7 +2924,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -2071,7 +2935,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -2084,8 +2947,38 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			"surprise", {
+			};
+
+		if (secondaryTextTone == "optimism") {
+			~secondaryRate = [[1], [1], [3], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+
+		};
+
+		if (textTone == "surprise") {
 				~rate = [[3.3, 3.7, 3.1, 3.9], [0], [2.9], [0], [3]];
 
 				presets[0].put(\amp, [0.5, 0.4, 0.2]);
@@ -2149,9 +3042,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			},
-			{ |default|
-				presets[0].put(\rate, [1]);
+			};
+
+		if (secondaryTextTone == "surprise") {
+				~secondaryRate = [[3.3, 3.7, 3.1, 3.9], [0], [2.9], [0], [3]];
+
+				secondaryPresets[0].put(\amp, [0.5, 0.4, 0.2]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\reverbMix, 7);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\modFreq, 0.5);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		if (textTone == "") {
+			~rate = [[1], [0], [2.9], [0], [3]];
+
 				presets[0].put(\amp, [0.5]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
@@ -2165,7 +3089,6 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\rate, [0]);
 				presets[1].put(\amp, [0]);
 				presets[1].put(\start, 0);
 				presets[1].put(\end, 1);
@@ -2177,7 +3100,6 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\rate, [3.0]);
 				presets[2].put(\amp, [0.5]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
@@ -2191,7 +3113,6 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\rate, [0]);
 				presets[3].put(\amp, [0]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
@@ -2203,7 +3124,6 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\rate, [3.0]);
 				presets[4].put(\amp, [0.5]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
@@ -2216,8 +3136,40 @@ Toner {
 				presets[4].put(\delayMaxTime, 0.1);
 				presets[4].put(\delayTime, 0.1);
 				presets[4].put(\decayTime, 4);
-			}
-		);
-		^presets;
+			};
+
+		if (secondaryTextTone == "") {
+			~secondaryRate = [[1], [0], [2.9], [0], [3]];
+
+				secondaryPresets[0].put(\rate, [1]);
+				secondaryPresets[0].put(\amp, [0.5]);
+				secondaryPresets[0].put(\filterFreq, 1500);
+				secondaryPresets[0].put(\filterRes, 3);
+				secondaryPresets[0].put(\start, 0);
+				secondaryPresets[0].put(\end, 1);
+				secondaryPresets[0].put(\loop, 1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
+				secondaryPresets[0].put(\reverbMix, 1);
+				secondaryPresets[0].put(\pitchShift, 0);
+				secondaryPresets[0].put(\delayMaxTime, 0);
+				secondaryPresets[0].put(\delayTime, 0);
+				secondaryPresets[0].put(\decayTime, 0);
+
+				secondaryPresets[1].put(\rate, [0]);
+				secondaryPresets[1].put(\amp, [0]);
+				secondaryPresets[1].put(\start, 0);
+				secondaryPresets[1].put(\end, 1);
+				secondaryPresets[1].put(\loop, 1);
+				secondaryPresets[1].put(\lfoPseqValue, 0);
+				secondaryPresets[1].put(\reverbMix, 1);
+				secondaryPresets[1].put(\pitchShift, 0);
+				secondaryPresets[1].put(\delayMaxTime, 0);
+				secondaryPresets[1].put(\delayTime, 0);
+				secondaryPresets[1].put(\decayTime, 0);
+		};
+
+		allPresets = [presets, secondaryPresets];
+
+		^allPresets;
 	}
 }
