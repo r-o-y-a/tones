@@ -209,7 +209,7 @@ Toner {
 	}
 
 	getTonesFromText { | text, runOffline, doNotPlaySecondary |
-		var textTones;
+		var textTones, b;
 		var textTone, secondaryTextTone;
 
 
@@ -334,7 +334,12 @@ Toner {
 			textTones.split($,)[0].postln;
 		} {
 			textTones.postln;
-		}
+		};
+
+
+		b = NetAddr.new("127.0.0.1", 57121);
+		b.sendMsg("/data", textTones);
+
 
 
 		^textTones;
