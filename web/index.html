@@ -12,6 +12,9 @@
             background-color: lightcoral;
             transition: background-color 0.5s;
         }
+        #data {
+            font-size: 32px;
+        }
     </style>
 </head>
 <body>
@@ -29,7 +32,7 @@
 
         function updateData(data) {
             var dataDiv = document.getElementById("data");
-            dataDiv.innerHTML = "<p>Data: " + JSON.stringify(data) + "</p>";
+            dataDiv.innerHTML = "<p>" + JSON.stringify(data) + "</p>";
         }
 
         var socket = new WebSocket("ws://172.20.10.2:8081");

@@ -1,7 +1,7 @@
 Toner {
-
 	var synthdef, synthdef2, runOffline = false;
 	var presets, secondaryPresets, allPresets, patterns;
+	var currentGroup, previousGroup;
 
     *new {
         arg synthDef, synthDef2, runOffline;
@@ -20,11 +20,16 @@ Toner {
 		allPresets = this.getPresets(primaryTextTone, secondaryTextTone);
 
 		if (allPresets != nil) {
+
+			// todo:
+			this.playRoutine(allPresets, synthdef, synthdef2, 0);
+			/*
 			if (doNotPlaySecondary == 0) {
 				patterns = this.playPatterns(allPresets, synthdef, synthdef2, 0);
 			} {
 				patterns = this.playPatterns(allPresets, synthdef, synthdef2);
 			};
+			*/
 
 			^patterns;
 		}
@@ -32,18 +37,105 @@ Toner {
 
 	/* -- private methods -- */
 
-	playPatterns { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
+
+    playRoutine { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
+
+		if (~currentSynths.notNil) {
+
+				var newSynths, newGroup;
+				var endTime = 4;
+				var steps = 100;
+				var stepTime = endTime / steps;
+
+				//currentGroup = ~currentSynths.at(\group).copy;
+				currentGroup.postln;
+
+
+				"currentSynths.notNil".postln;
+
+				// TOOD: use the following example for accessing the synths
+				// from: https://doc.sccode.org/Classes/Group.html
+				/*
+				(
+				r = Routine({
+				inf.do({
+				l.do({ arg node;
+				node.set("freq",rrand(10,120));
+				1.0.wait;
+				});
+				})
+				});
+
+				r.play;
+				)*/
+
+
+
+
+			previousGroup = currentGroup.copy;
+
+				// create the new synths to replace the currently playing
+				newSynths = this.createSynths(allPresets, synthdef, synthdef2, doNotPlaySecondary);
+				newGroup = newSynths.at(\group);
+				~currentSynths = newSynths;
+				newGroup.postln;
+
+
+				//currentGroup.set(\amp, 0.3);
+				//currentGroup.set(\amp, 0.1);
+
+
+				// decrease volume of current group
+
+
+			// if doFunction is running, stop and release, and start new do
+
+			{
+				steps.do { |i|
+					var currentAmp = 1.0 - (i / steps);
+
+					previousGroup.set(\amp, currentAmp);
+
+					stepTime.wait;
+				};
+
+				previousGroup.free;
+
+				"after do loop".postln;
+
+
+
+				//currentGroup.set(\amp, 0);
+				//currentGroup.set(\gate, 0);
+
+				//currentGroup.release;
+
+
+
+			}.fork();
+        } {
+            // if no currently playing synths, create first ones
+			~currentSynths = this.createSynths(allPresets, synthdef, synthdef2, doNotPlaySecondary);
+			"created first synths".postln;
+		};
+
+		^~currentSynths;
+	}
+
+
+	createSynths { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
 		var p1, p2, p3, p4, p5;
 		var p2nd1, p2nd2;
 		var patterns = Dictionary.new;
-
 		var primaryPresets = allPresets[0];
 		var secondaryPresets = allPresets[1];
+		currentGroup = Group.after;
 
 
 		p1 = Pdef(\pSample1,
 			Pmono(
 				synthdef,
+				\group, currentGroup,
 				\bufnum, ~buffers[0].bufnum,
 				\rate, Pseq(~rate[0], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[0].at(\lfoPseqValue) }], inf),
@@ -55,7 +147,13 @@ Toner {
 				\pitchShift, primaryPresets[0].at(\pitchShift),
 				\delayMaxTime, primaryPresets[0].at(\delayMaxTime),
 				\delayTime, primaryPresets[0].at(\delayTime),
-				\pitchShift, primaryPresets[0].at(\pitchShift)
+				\pitchShift, primaryPresets[0].at(\pitchShift),
+				\callback, { // todo: test removing later
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 		    )
 		);
 		patterns.put(\p1, p1);
@@ -65,6 +163,7 @@ Toner {
 		p2 = Pdef(\pSample2,
 			Pmono(
 				synthdef,
+				\group, currentGroup,
 				\bufnum, ~buffers[1].bufnum,
 				\rate, Pseq(~rate[1], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[1].at(\lfoPseqValue) }], inf),
@@ -76,7 +175,13 @@ Toner {
 				\pitchShift, primaryPresets[1].at(\pitchShift),
 				\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
 				\delayTime, primaryPresets[1].at(\delayTime),
-				\pitchShift, primaryPresets[1].at(\pitchShift)
+				\pitchShift, primaryPresets[1].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 		    )
 		);
 		patterns.put(\p2, p2);
@@ -85,6 +190,7 @@ Toner {
 		p3 = Pdef(\pSample3,
 			Pmono(
 				synthdef,
+				\group, currentGroup,
 				\bufnum, ~buffers[2].bufnum,
 				\rate, Pseq(~rate[2], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[2].at(\lfoPseqValue) }], inf),
@@ -96,7 +202,13 @@ Toner {
 				\pitchShift, primaryPresets[2].at(\pitchShift),
 				\delayMaxTime, primaryPresets[2].at(\delayMaxTime),
 				\delayTime, primaryPresets[2].at(\delayTime),
-				\pitchShift, primaryPresets[2].at(\pitchShift)
+				\pitchShift, primaryPresets[2].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 		    )
 		);
 		patterns.put(\p3, p3);
@@ -106,6 +218,7 @@ Toner {
 		p4 = Pdef(\pSample4,
 			Pmono(
 				synthdef,
+				\group, currentGroup,
 				\bufnum, ~buffers[3].bufnum,
 				\rate, Pseq(~rate[3], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[3].at(\lfoPseqValue) }], inf),
@@ -117,7 +230,13 @@ Toner {
 				\pitchShift, primaryPresets[3].at(\pitchShift),
 				\delayMaxTime, primaryPresets[3].at(\delayMaxTime),
 				\delayTime, primaryPresets[3].at(\delayTime),
-				\pitchShift, primaryPresets[3].at(\pitchShift)
+				\pitchShift, primaryPresets[3].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 		    )
 		);
 		patterns.put(\p4, p4);
@@ -127,6 +246,7 @@ Toner {
 		p5 = Pdef(\pSample5,
 			Pmono(
 				synthdef,
+				\group, currentGroup,
 				\bufnum, ~buffers[4].bufnum,
 				\rate, Pseq(~rate[4], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[4].at(\lfoPseqValue) }], inf),
@@ -138,12 +258,17 @@ Toner {
 				\pitchShift, primaryPresets[4].at(\pitchShift),
 				\delayMaxTime, primaryPresets[4].at(\delayMaxTime),
 				\delayTime, primaryPresets[4].at(\delayTime),
-				\pitchShift, primaryPresets[4].at(\pitchShift)
+				\pitchShift, primaryPresets[4].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 		    )
 		);
 		patterns.put(\p5, p5);
 		p5.play;
-
 
 
 		// --- secondary synths ----
@@ -153,6 +278,7 @@ Toner {
 			p2nd1 = Pdef(\pSample2nd1,
 				Pmono(
 					synthdef2,
+					\group, currentGroup,
 					\bufnum, ~buffers[5].bufnum,
 					\rate, Pseq(~secondaryRate[0], inf),
 					\lfoFreq, Pseq([ Pfunc { secondaryPresets[0].at(\lfoPseqValue) }], inf),
@@ -164,15 +290,23 @@ Toner {
 					\pitchShift, secondaryPresets[0].at(\pitchShift),
 					\delayMaxTime, secondaryPresets[0].at(\delayMaxTime),
 					\delayTime, secondaryPresets[0].at(\delayTime),
-					\pitchShift, secondaryPresets[0].at(\pitchShift)
+					\pitchShift, secondaryPresets[0].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 				)
 			);
 			patterns.put(\p2nd1, p2nd1);
 			p2nd1.play;
 
+
 			p2nd2 = Pdef(\pSample2nd2,
 				Pmono(
 					synthdef2,
+					\group, currentGroup,
 					\bufnum, ~buffers[6].bufnum,
 					\rate, Pseq(~secondaryRate[1], inf),
 					\lfoFreq, Pseq([ Pfunc { primaryPresets[1].at(\lfoPseqValue) }], inf),
@@ -184,13 +318,20 @@ Toner {
 					\pitchShift, primaryPresets[1].at(\pitchShift),
 					\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
 					\delayTime, primaryPresets[1].at(\delayTime),
-					\pitchShift, primaryPresets[1].at(\pitchShift)
+					\pitchShift, primaryPresets[1].at(\pitchShift),
+				\callback, {
+					|event|
+					event[\addToCleanup] = {
+						event.free
+					}
+				}
 				)
 			);
 			patterns.put(\p2nd2, p2nd2);
 			p2nd2.play;
 		};
 
+		patterns.put(\group, currentGroup); // also return the current group
 
 		^patterns;
 	}
@@ -808,7 +949,7 @@ Toner {
 				secondaryPresets[0].put(\start, 0);
 				secondaryPresets[0].put(\end, 1);
 				secondaryPresets[0].put(\loop, 1);
-				secondaryPresets[0].put(\lfoPseqValue, 0.1);
+				secondaryPresets[0].put(\lfoPseqValue, 0);
 				secondaryPresets[0].put(\reverbMix, 7);
 				secondaryPresets[0].put(\pitchShift, 0);
 				secondaryPresets[0].put(\delayMaxTime, 0);

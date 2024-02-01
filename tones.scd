@@ -10,22 +10,22 @@ SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0);
+
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0, /*doneAction: Done.freeGroup*/);
 	sound = sound *  amp;
-
-	//sound = PitchShift.ar(sound, 2, pitchShift);
-	// PitchShift_Ctor: alloc failed, increase server's RT memory (e.g. via ServerOptions)
-	//sound = PitchShift.ar(sound, 0.5, 1, 0, 0.01);
-
-	//sound = Warp1.ar(1, sound, LFSaw.ar(1/15).range(0, 1), MouseX.kr(0.5,2), 0.1, -1, 8, 0.1, 2);
 
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
     //sound = HPF.ar(sound, filterFreq, filterRes); // test
-	sound = FreeVerb.ar(sound, 0.5, reverbMix) *0.1;
-	DetectSilence.ar(sound, doneAction: 2);
+	sound = FreeVerb.ar(sound, 0.5, 4) *0.1;
+
+
+	//FreeSelf.kr(Done.kr(sound, 2));
+	//DetectSilence.ar(sound, doneAction: 2);
+	//DetectSilence.ar(sound + Impulse.ar(0), doneAction: 2);
+	//FreeSelf.kr(DetectSilence.ar(sound + Impulse.ar(0)).product);
 
     Out.ar(0, sound);
 }).add;
@@ -34,24 +34,19 @@ SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0);
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0, /*doneAction: Done.freeGroup*/);
 	sound = sound *  amp;
 
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
-    //sound = HPF.ar(sound, filterFreq, filterRes); // test
-	sound = FreeVerb.ar(sound, 0.5, reverbMix) *0.1;
-	DetectSilence.ar(sound, doneAction: 2);
+	sound = FreeVerb.ar(sound, 0.5, 4) *0.1;
+	//DetectSilence.ar(sound, doneAction: 2);
+
 
     Out.ar(0, sound);
 }).add;
-
-
-
-
-
 
 
 s.sync;
@@ -60,6 +55,7 @@ s.sync;
 t = Toner.new(\samplePlayer1, \samplePlayer2);
 }
 );
+
 
 
 
@@ -85,9 +81,11 @@ h.play;
 h.stop;
 
 
+
+
 p = t.t("hello", 0); // 0 to indicate do not play secondary synths
 
-
+Pdef(\pSample5).isPlaying
 
 // "America" - Allen Ginsberg
 p = t.t("America I have given you all and now I am nothing.", 0); // disappointment, gratitude
@@ -141,7 +139,6 @@ p = t.t("I read it in the basement of the Berkeley Public Library."); // neutral
 p = t.t("It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me."); // neutral, annoyance, realization
 p = t.t("It occurs to me that I am America."); // realization, neutral
 p = t.t("I am talking to myself again."); // neutral
-
 
 
 
