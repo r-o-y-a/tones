@@ -99,11 +99,12 @@ p = t.t("this is gratitude");
 Pdef(\pSample5).isPlaying
 
 // "America" - Allen Ginsberg
-p = t.t("America I have given you all and now I am nothing."); // disappointment, gratitude
-p = t.t("America two dollars and twentyseven cents January 17, 1956."); // neutral, approval
-p = t.t("I can’t stand my own mind."); // disapproval, anger, annoyance, neutral, disappointment
-p = t.t("America when will we end the human war?"); // curiosity, confusion
-p = t.t("Go fuck yourself with your atom bomb."); // anger, neutral, fear
+
+p = t.t("America I have given you all and now I am nothing.", 1); // disappointment, gratitude
+p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1); // neutral, approval
+p = t.t("I can’t stand my own mind.", 1); // disapproval, anger, annoyance, neutral, disappointment
+p = t.t("America when will we end the human war?", 1); // curiosity, confusion
+p = t.t("Go fuck yourself with your atom bomb.", 1); // anger, neutral, fear
 // ------- static sample change, add secondary tone
 p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief
 p = t.t("I won’t write my poem till I’m in my right mind."); // realization, neutral, disapproval

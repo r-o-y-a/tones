@@ -6,156 +6,320 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tones</title>
     <style>
+        /* page styles */
+
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            padding: 5em;
+        }
+        h1 {
+            font-size: 20px;
+            display: inline-block;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
+        h2 {
+            font-size: 30px;
+            display: inline-block;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
         #flasher {
             width: 100px;
             height: 100px;
-            background-color: lightcoral;
+            background-color: #fff;
             transition: background-color 0.5s;
         }
-        #data {
-            font-size: 32px;
+        h1#primaryData {
+            display: block;
+            margin: 0 0 30px 0;
+            padding: 0 0 0 0;
+        }
+        h1#secondaryData {
+            display: block;
+            margin: 40px 0 30px 0;
+            padding: 0 0 0 0;
         }
 
-
-        body {
-        padding: 5em;
+        /* notation styles - https://codepen.io/32bitkid/details/Ihciy">https://codepen.io/32bitkid/details/Ihciy */
+        .bar {
+        position: relative;
+        display: inline-block;
+        width: 12px;
+        height: 32px;
+        margin: 0 12px;
+        margin-bottom: 48px;
+        width: 2px;
+        border-right: 1px solid black;
         }
-
-/* music notation styles - https://codepen.io/32bitkid/details/Ihciy">https://codepen.io/32bitkid/details/Ihciy */
-.bar {
-  position: relative;
-  display: inline-block;
-  width: 12px;
-  height: 32px;
-  margin: 0 12px;
-  margin-bottom: 48px;
-  width: 2px;
-  border-right: 1px solid black;
-}
-.debug .bar {
-  outline: 1px solid rgba(255, 0, 0, 0.1);
-}
-.bar.double,
-.bar.end {
-  border-left: 1px solid black;
-}
-.bar.end {
-  float: right;
-  border-right-width: 4px;
-  margin-right: 0;
-}
-.staff {
-  font-size: 0;
-  background-image: linear-gradient(180deg, #999 0, #999 1px, transparent 1px, transparent 8px, #999 8px, #999 9px, transparent 9px, transparent 16px, #999 16px, #999 17px, transparent 17px, transparent 24px, #999 24px, #999 25px, transparent 25px, transparent 32px, #999 32px, #999 33px, transparent 33px);
-  background-size: 100% 80px;
-}
-.staff.debug {
-  background-color: rgba(0, 255, 0, 0.1);
-}
-.note {
-  position: relative;
-  display: inline-block;
-  width: 12px;
-  height: 32px;
-  margin: 0 12px;
-  margin-bottom: 48px;
-}
-.debug .note {
-  outline: 1px solid rgba(255, 0, 0, 0.1);
-}
-.note::before {
-  height: 8px;
-  width: 12px;
-}
-.whole.note::before {
-  position: absolute;
-  content: "";
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-left-width: 4px;
-  border-right-width: 4px;
-  border-radius: 50%;
-}
-.half.note::after,
-.quarter.note::after {
-  content: "";
-  height: 28px;
-  width: 1px;
-  background-color: black;
-  position: absolute;
-  top: -24px;
-  right: 0;
-}
-.half.note::before,
-.quarter.note::before {
-  position: absolute;
-  content: "";
-  transform: rotatez(-15deg);
-  border-radius: 50%;
-}
-.half.note::before {
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-top-width: 2.18181818px;
-  border-bottom-width: 2.18181818px;
-}
-.quarter.note::before {
-  background-color: black;
-}
-.note.d4 {
-  top: 32px;
-}
-.note.e4 {
-  top: 28px;
-}
-.note.f4 {
-  top: 24px;
-}
-.note.g4 {
-  top: 20px;
-}
-.note.a5 {
-  top: 16px;
-}
-.note.b5 {
-  top: 12px;
-}
-.note.c5 {
-  top: 8px;
-}
-.note.d5 {
-  top: 4px;
-}
-.note.e5 {
-  top: 0px;
-}
-.note.f5 {
-  top: -4px;
-}
-.note.g5 {
-  top: -8px;
-}
-.quarter.note.d5::after,
-.half.note.d5::after,
-.quarter.note.e5::after,
-.half.note.e5::after,
-.quarter.note.f5::after,
-.half.note.f5::after,
-.quarter.note.g5::after,
-.half.note.g5::after {
-  top: 4px;
-}
-
-
+        .debug .bar {
+        outline: 1px solid rgba(255, 0, 0, 0.1);
+        }
+        .bar.double,
+        .bar.end {
+        border-left: 1px solid black;
+        }
+        .bar.end {
+        float: right;
+        border-right-width: 4px;
+        margin-right: 0;
+        }
+        .staff {
+        font-size: 0;
+        background-image: linear-gradient(180deg, #999 0, #999 1px, transparent 1px, transparent 8px, #999 8px, #999 9px, transparent 9px, transparent 16px, #999 16px, #999 17px, transparent 17px, transparent 24px, #999 24px, #999 25px, transparent 25px, transparent 32px, #999 32px, #999 33px, transparent 33px);
+        background-size: 100% 80px;
+        }
+        .staff.debug {
+        background-color: rgba(0, 255, 0, 0.1);
+        }
+        .note {
+        position: relative;
+        display: inline-block;
+        width: 12px;
+        height: 32px;
+        margin: 0 12px;
+        margin-bottom: 48px;
+        }
+        .debug .note {
+        outline: 1px solid rgba(255, 0, 0, 0.1);
+        }
+        .note::before {
+        height: 8px;
+        width: 12px;
+        }
+        .whole.note::before {
+        position: absolute;
+        content: "";
+        box-sizing: border-box;
+        border: 1px solid black;
+        border-left-width: 4px;
+        border-right-width: 4px;
+        border-radius: 50%;
+        }
+        .half.note::after,
+        .quarter.note::after {
+        content: "";
+        height: 28px;
+        width: 1px;
+        background-color: black;
+        position: absolute;
+        top: -24px;
+        right: 0;
+        }
+        .half.note::before,
+        .quarter.note::before {
+        position: absolute;
+        content: "";
+        transform: rotatez(-15deg);
+        border-radius: 50%;
+        }
+        .half.note::before {
+        box-sizing: border-box;
+        border: 1px solid black;
+        border-top-width: 2.18181818px;
+        border-bottom-width: 2.18181818px;
+        }
+        .quarter.note::before {
+        background-color: black;
+        }
+        .note.d4 {
+        top: 32px;
+        }
+        .note.e4 {
+        top: 28px;
+        }
+        .note.f4 {
+        top: 24px;
+        }
+        .note.g4 {
+        top: 20px;
+        }
+        .note.a5 {
+        top: 16px;
+        }
+        .note.b5 {
+        top: 12px;
+        }
+        .note.c5 {
+        top: 8px;
+        }
+        .note.d5 {
+        top: 4px;
+        }
+        .note.e5 {
+        top: 0px;
+        }
+        .note.f5 {
+        top: -4px;
+        }
+        .note.g5 {
+        top: -8px;
+        }
+        .quarter.note.d5::after,
+        .half.note.d5::after,
+        .quarter.note.e5::after,
+        .half.note.e5::after,
+        .quarter.note.f5::after,
+        .half.note.f5::after,
+        .quarter.note.g5::after,
+        .half.note.g5::after {
+        top: 4px;
+        }
     </style>
+
+<script>
+    function flashSquare(data) {
+        var tones = data.data.toString().split(",");
+        var primaryTone = tones[0];
+        var flasher = document.getElementById("flasher");
+        flasher.style.backgroundColor = "#cccccc";
+        setTimeout(function () {
+            flasher.style.backgroundColor = getColor(primaryTone);
+        }, 500);
+    }
+
+    function getColor(tone) {
+        switch (tone) {
+            case 'admiration':
+                hexColor = '#FFD700'; // Gold
+                break;
+            case 'amusement':
+                hexColor = '#FF69B4'; // Hot Pink
+                break;
+            case 'anger':
+                hexColor = '#8B0000'; // Red
+                break;
+            case 'annoyance':
+                hexColor = '#FF4147'; // Tomato
+                break;
+            case 'approval':
+                hexColor = '#00FF7F'; // Spring Green
+                break;
+            case 'caring':
+                hexColor = '#FFB6C1'; // Light Pink
+                break;
+            case 'confusion':
+                hexColor = '#808080'; // Gray
+                break;
+            case 'curiosity':
+                hexColor = '#FFA500'; // Orange
+                break;
+            case 'desire':
+                hexColor = '#800080'; // Purple
+                break;
+            case 'disappointment':
+                hexColor = '#696969'; // Dim Gray
+                break;
+            case 'disapproval':
+                hexColor = '#333333'; // 
+                break;
+            case 'disgust':
+                hexColor = '#6B8E23'; // Olive Drab
+                break;
+            case 'embarrassment':
+                hexColor = '#FFC0CB'; // Pink
+                break;
+            case 'excitement':
+                hexColor = '#FFD700'; // Gold
+                break;
+            case 'fear':
+                hexColor = '#000080'; // Navy
+                break;
+            case 'gratitude':
+                hexColor = '#32CD32'; // Lime Green
+                break;
+            case 'grief':
+                hexColor = '#2F4F4F'; // Dark Slate Gray
+                break;
+            case 'joy':
+                hexColor = '#FFD700'; // Gold
+                break;
+            case 'love':
+                hexColor = '#FF69B4'; // Hot Pink
+                break;
+            case 'nervousness':
+                hexColor = '#FF6347'; // Tomato
+                break;
+            case 'optimism':
+                hexColor = '#FFA500'; // Orange
+                break;
+            case 'pride':
+                hexColor = '#800080'; // Purple
+                break;
+            case 'realization':
+                hexColor = '#00FFFF'; // Spring Green
+                break;
+            case 'relief':
+                hexColor = '#32CD32'; // Lime Green
+                break;
+            case 'remorse':
+                hexColor = '#8B0000'; // Dark Red
+                break;
+            case 'sadness':
+                hexColor = '#000000'; // Navy
+                break;
+            case 'surprise':
+                hexColor = '#FFD700'; // Gold
+                break;
+            case 'neutral':
+                hexColor = '#D3D3D3'; // Light Gray
+                break;
+            default:
+                hexColor = '#cccccc'; 
+        }
+    return hexColor;
+    }
+
+    function updateData(data) {
+        var primaryData = document.getElementById("primaryData");
+        var secondaryData = document.getElementById("secondaryData");
+        var notationDiv = document.getElementById("notation");
+        var tones = data.data.toString().split(",");
+
+
+        if (tones.length > 0 && tones[1] != undefined) {
+            primaryData.innerHTML = "<h1>tone: </h1> <h2>" + tones[0] + "</h2>";
+            secondaryData.innerHTML = "<h1>secondary tone: </h1> <h2>" + tones[1]+ "</h2>";
+            secondaryData.style.visibility = "visible";
+            notationDiv.style.visibility = "visible";
+        }
+        else {
+            primaryData.innerHTML = "tone: " + tones[0];
+            secondaryData.style.visibility = "hidden";
+            notationDiv.style.visibility = "hidden";
+        }
+    }
+
+    var socket = new WebSocket("ws://192.168.0.10:8081");
+
+    socket.onopen = function(event) {
+        console.log("WebSocket connection opened.");
+    };
+
+    socket.onmessage = function(event) {
+        console.log("Received message:", event.data);
+        try {
+            var jsonData = JSON.parse(event.data);
+            flashSquare(jsonData);
+            updateData(jsonData);
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+        }
+    };
+    
+    socket.onclose = function(event) {
+        console.log("WebSocket connection closed.");
+    };
+</script>
+
 </head>
 <body>
     <!-- data -->  
+    <h1 id="primaryData"></h1>
     <div id="flasher"></div>
-    <div id="data"></div>
-  
+    <h1 id="secondaryData"></h1>
 <!-- music notation -->  
-<div id="notation" class="staff gratitude">
+<div id="notation" class="staff gratitude" style="visibility: hidden;">
   <div class="half note e4"></div>
   <div class="quarter note f4"></div>
   <div class="quarter note g4"></div>
@@ -181,54 +345,6 @@
   <div class="bar end"></div>
 </div>
 
-
-    <script>
-        function flashSquare() {
-            console.log("flashSquare")
-            var flasher = document.getElementById("flasher");
-            flasher.style.backgroundColor = "darkred";
-            setTimeout(function () {
-                flasher.style.backgroundColor = "lightcoral";
-            }, 500);
-        }
-
-        function updateData(data) {
-            var dataDiv = document.getElementById("data");
-            var notationDiv = document.getElementById("notation");
-            var tones = data.data.toString().split(",");
-
-            if (tones.length > 0) {
-                dataDiv.innerHTML = "<p>" + tones[1] + "</p>";
-            }
-            else {
-                dataDiv.innerHTML = "<p>" + tones[0] + "</p>";
-            }
-
-            /* todo: unhide notationDiv class */
-
-        }
-
-        var socket = new WebSocket("ws://192.168.0.10:8081");
-
-        socket.onopen = function(event) {
-            console.log("WebSocket connection opened.");
-        };
-
-        socket.onmessage = function(event) {
-            console.log("Received message:", event.data);
-            try {
-                var jsonData = JSON.parse(event.data);
-                flashSquare();
-                updateData(jsonData);
-            } catch (error) {
-                console.error("Error parsing JSON:", error);
-            }
-        };
-        
-        socket.onclose = function(event) {
-            console.log("WebSocket connection closed.");
-        };
-    </script>
 </body>
 </html>
 

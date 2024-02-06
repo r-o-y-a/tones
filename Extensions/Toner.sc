@@ -8,10 +8,10 @@ Toner {
 		^super.newCopyArgs(synthDef, synthDef2, runOffline);
     }
 
-	t { | text, playSecondary |
-		var allPresets, patterns;
+	t { | text, hideSecondary |
+		var allPresets, patterns, playSecondary;
 		var primaryTextTone, secondaryTextTone;
-		var textTones = this.getTonesFromText(text, runOffline);
+		var textTones = this.getTonesFromText(text, runOffline, hideSecondary);
 
 		var tones = textTones.split($,);
 		primaryTextTone = tones[0];
@@ -39,11 +39,8 @@ Toner {
 				var steps = 100;
 				var stepTime = endTime / steps;
 
-				//currentGroup = ~currentSynths.at(\group).copy;
 				currentGroup.postln;
 
-
-				"currentSynths.notNil".postln;
 
 				// TOOD: use the following example for accessing the synths
 				// from: https://doc.sccode.org/Classes/Group.html
@@ -61,23 +58,10 @@ Toner {
 				r.play;
 				)*/
 
-
-
-
 			previousGroup = currentGroup.copy;
 
 
-
-				//currentGroup.set(\amp, 0.3);
-				//currentGroup.set(\amp, 0.1);
-
-
-				// decrease volume of current group
-
-
-			// if doFunction is running, stop and release, and start new do
-
-
+			// decrease volume of current group
 			{
 				steps.do { |i|
 					var currentAmp = 1.0 - (i / steps);
@@ -90,7 +74,6 @@ Toner {
 				previousGroup.free;
 
 				"previous group released".postln;
-
 
 
 				//currentGroup.set(\amp, 0);
@@ -119,7 +102,7 @@ Toner {
 
 	createSynths { | allPresets, synthdef, synthdef2, playSecondary |
 		var p1, p2, p3, p4, p5;
-		var p2nd1, p2nd2;
+		//var p2nd1, p2nd2;
 		var patterns = Dictionary.new;
 		var primaryPresets = allPresets[0];
 		var secondaryPresets = allPresets[1];
@@ -237,6 +220,7 @@ Toner {
 
 		// --- secondary synths ----
 
+		/*
 		if (playSecondary == 1) {
 
 			p2nd1 = Pdef(\pSample2nd1,
@@ -282,6 +266,7 @@ Toner {
 			patterns.put(\p2nd2, p2nd2);
 			p2nd2.play;
 		};
+		*/
 
 		patterns.put(\group, currentGroup); // also return the current group
 
@@ -301,7 +286,7 @@ Toner {
 		^textTones;
 	}
 
-	getTonesFromText { | text, runOffline |
+	getTonesFromText { | text, runOffline, hideSecondary |
 		var textTones, b;
 		var textTone, secondaryTextTone;
 
@@ -310,7 +295,7 @@ Toner {
 			textTones = this.getTonesFromApi(text);
 		};
 
-		// run offline -- TODO: add secondary text tone
+		// run offline
 		if (textTones == nil) {
 			switch(text,
 				"It was a cold depressing winter day.", {
@@ -423,17 +408,16 @@ Toner {
 
 
 
-		//if (playSecondary == 1) {
-			textTones.postln;
-		//} {
-			//textTones.split($,)[0].postln;
-		//};
-
-
 		b = NetAddr.new("127.0.0.1", 57121);
-		b.sendMsg("/data", textTones);
 
 
+		if (hideSecondary == 1) {
+			textTones.split($,)[0].postln;
+			b.sendMsg("/data", textTones.split($,)[0]);
+		} {
+			textTones.postln;
+			b.sendMsg("/data", textTones);
+		};
 
 		^textTones;
 	}
