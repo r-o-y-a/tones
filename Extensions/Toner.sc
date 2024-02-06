@@ -8,10 +8,10 @@ Toner {
 		^super.newCopyArgs(synthDef, synthDef2, runOffline);
     }
 
-	t { | text, doNotPlaySecondary |
+	t { | text, playSecondary |
 		var allPresets, patterns;
 		var primaryTextTone, secondaryTextTone;
-		var textTones = this.getTonesFromText(text, runOffline, doNotPlaySecondary);
+		var textTones = this.getTonesFromText(text, runOffline);
 
 		var tones = textTones.split($,);
 		primaryTextTone = tones[0];
@@ -21,15 +21,7 @@ Toner {
 
 		if (allPresets != nil) {
 
-			// todo:
-			this.playRoutine(allPresets, synthdef, synthdef2, 0);
-			/*
-			if (doNotPlaySecondary == 0) {
-				patterns = this.playPatterns(allPresets, synthdef, synthdef2, 0);
-			} {
-				patterns = this.playPatterns(allPresets, synthdef, synthdef2);
-			};
-			*/
+			patterns = this.playRoutine(allPresets, synthdef, synthdef2, playSecondary);
 
 			^patterns;
 		}
@@ -38,7 +30,7 @@ Toner {
 	/* -- private methods -- */
 
 
-    playRoutine { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
+    playRoutine { | allPresets, synthdef, synthdef2, playSecondary |
 
 		if (~currentSynths.notNil) {
 
@@ -74,11 +66,6 @@ Toner {
 
 			previousGroup = currentGroup.copy;
 
-				// create the new synths to replace the currently playing
-				newSynths = this.createSynths(allPresets, synthdef, synthdef2, doNotPlaySecondary);
-				newGroup = newSynths.at(\group);
-				~currentSynths = newSynths;
-				newGroup.postln;
 
 
 				//currentGroup.set(\amp, 0.3);
@@ -89,6 +76,7 @@ Toner {
 
 
 			// if doFunction is running, stop and release, and start new do
+
 
 			{
 				steps.do { |i|
@@ -101,7 +89,7 @@ Toner {
 
 				previousGroup.free;
 
-				"after do loop".postln;
+				"previous group released".postln;
 
 
 
@@ -109,13 +97,19 @@ Toner {
 				//currentGroup.set(\gate, 0);
 
 				//currentGroup.release;
-
-
-
 			}.fork();
+
+
+			// create the new synths to replace the currently playing
+				newSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
+				newGroup = newSynths.at(\group);
+				~currentSynths = newSynths;
+				newGroup.postln;
+
+
         } {
             // if no currently playing synths, create first ones
-			~currentSynths = this.createSynths(allPresets, synthdef, synthdef2, doNotPlaySecondary);
+			~currentSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
 			"created first synths".postln;
 		};
 
@@ -123,7 +117,7 @@ Toner {
 	}
 
 
-	createSynths { | allPresets, synthdef, synthdef2, doNotPlaySecondary |
+	createSynths { | allPresets, synthdef, synthdef2, playSecondary |
 		var p1, p2, p3, p4, p5;
 		var p2nd1, p2nd2;
 		var patterns = Dictionary.new;
@@ -147,13 +141,7 @@ Toner {
 				\pitchShift, primaryPresets[0].at(\pitchShift),
 				\delayMaxTime, primaryPresets[0].at(\delayMaxTime),
 				\delayTime, primaryPresets[0].at(\delayTime),
-				\pitchShift, primaryPresets[0].at(\pitchShift),
-				\callback, { // todo: test removing later
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+				\pitchShift, primaryPresets[0].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p1, p1);
@@ -175,13 +163,7 @@ Toner {
 				\pitchShift, primaryPresets[1].at(\pitchShift),
 				\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
 				\delayTime, primaryPresets[1].at(\delayTime),
-				\pitchShift, primaryPresets[1].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+				\pitchShift, primaryPresets[1].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p2, p2);
@@ -202,13 +184,7 @@ Toner {
 				\pitchShift, primaryPresets[2].at(\pitchShift),
 				\delayMaxTime, primaryPresets[2].at(\delayMaxTime),
 				\delayTime, primaryPresets[2].at(\delayTime),
-				\pitchShift, primaryPresets[2].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+				\pitchShift, primaryPresets[2].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p3, p3);
@@ -230,13 +206,7 @@ Toner {
 				\pitchShift, primaryPresets[3].at(\pitchShift),
 				\delayMaxTime, primaryPresets[3].at(\delayMaxTime),
 				\delayTime, primaryPresets[3].at(\delayTime),
-				\pitchShift, primaryPresets[3].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+				\pitchShift, primaryPresets[3].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p4, p4);
@@ -258,13 +228,7 @@ Toner {
 				\pitchShift, primaryPresets[4].at(\pitchShift),
 				\delayMaxTime, primaryPresets[4].at(\delayMaxTime),
 				\delayTime, primaryPresets[4].at(\delayTime),
-				\pitchShift, primaryPresets[4].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+				\pitchShift, primaryPresets[4].at(\pitchShift)
 		    )
 		);
 		patterns.put(\p5, p5);
@@ -273,7 +237,7 @@ Toner {
 
 		// --- secondary synths ----
 
-		if (doNotPlaySecondary != 0) {
+		if (playSecondary == 1) {
 
 			p2nd1 = Pdef(\pSample2nd1,
 				Pmono(
@@ -290,13 +254,7 @@ Toner {
 					\pitchShift, secondaryPresets[0].at(\pitchShift),
 					\delayMaxTime, secondaryPresets[0].at(\delayMaxTime),
 					\delayTime, secondaryPresets[0].at(\delayTime),
-					\pitchShift, secondaryPresets[0].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+					\pitchShift, secondaryPresets[0].at(\pitchShift)
 				)
 			);
 			patterns.put(\p2nd1, p2nd1);
@@ -318,13 +276,7 @@ Toner {
 					\pitchShift, primaryPresets[1].at(\pitchShift),
 					\delayMaxTime, primaryPresets[1].at(\delayMaxTime),
 					\delayTime, primaryPresets[1].at(\delayTime),
-					\pitchShift, primaryPresets[1].at(\pitchShift),
-				\callback, {
-					|event|
-					event[\addToCleanup] = {
-						event.free
-					}
-				}
+					\pitchShift, primaryPresets[1].at(\pitchShift)
 				)
 			);
 			patterns.put(\p2nd2, p2nd2);
@@ -349,7 +301,7 @@ Toner {
 		^textTones;
 	}
 
-	getTonesFromText { | text, runOffline, doNotPlaySecondary |
+	getTonesFromText { | text, runOffline |
 		var textTones, b;
 		var textTone, secondaryTextTone;
 
@@ -471,11 +423,11 @@ Toner {
 
 
 
-		if (doNotPlaySecondary == 0) {
-			textTones.split($,)[0].postln;
-		} {
+		//if (playSecondary == 1) {
 			textTones.postln;
-		};
+		//} {
+			//textTones.split($,)[0].postln;
+		//};
 
 
 		b = NetAddr.new("127.0.0.1", 57121);

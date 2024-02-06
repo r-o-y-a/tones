@@ -34,6 +34,7 @@ SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
+
 	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0, /*doneAction: Done.freeGroup*/);
 	sound = sound *  amp;
 
@@ -41,9 +42,14 @@ SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
+    //sound = HPF.ar(sound, filterFreq, filterRes); // test
 	sound = FreeVerb.ar(sound, 0.5, 4) *0.1;
-	//DetectSilence.ar(sound, doneAction: 2);
 
+
+	//FreeSelf.kr(Done.kr(sound, 2));
+	//DetectSilence.ar(sound, doneAction: 2);
+	//DetectSilence.ar(sound + Impulse.ar(0), doneAction: 2);
+	//FreeSelf.kr(DetectSilence.ar(sound + Impulse.ar(0)).product);
 
     Out.ar(0, sound);
 }).add;
@@ -83,16 +89,21 @@ h.stop;
 
 
 
-p = t.t("hello", 0); // 0 to indicate do not play secondary synths
+
+
+
+p = t.t("this is gratitude");
+
+
 
 Pdef(\pSample5).isPlaying
 
 // "America" - Allen Ginsberg
-p = t.t("America I have given you all and now I am nothing.", 0); // disappointment, gratitude
-p = t.t("America two dollars and twentyseven cents January 17, 1956.", 0); // neutral, approval
-p = t.t("I can’t stand my own mind.", 0); // disapproval, anger, annoyance, neutral, disappointment
-p = t.t("America when will we end the human war?", 0); // curiosity, confusion
-p = t.t("Go fuck yourself with your atom bomb.", 0); // anger, neutral, fear
+p = t.t("America I have given you all and now I am nothing."); // disappointment, gratitude
+p = t.t("America two dollars and twentyseven cents January 17, 1956."); // neutral, approval
+p = t.t("I can’t stand my own mind."); // disapproval, anger, annoyance, neutral, disappointment
+p = t.t("America when will we end the human war?"); // curiosity, confusion
+p = t.t("Go fuck yourself with your atom bomb."); // anger, neutral, fear
 // ------- static sample change, add secondary tone
 p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief
 p = t.t("I won’t write my poem till I’m in my right mind."); // realization, neutral, disapproval
