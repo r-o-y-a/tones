@@ -98,7 +98,7 @@ p = t.t("America the plum blossoms are falling."); // neutral, sadness
 // ------- static sample change
 p = t.t("I haven’t read the newspapers for months, everyday somebody goes on trial for murder."); // disapproval, neutral, realization
 p = t.t("America I feel sentimental about the Wobblies."); // sadness, grief, love
-p = t.t("America I used to be a communist when I was a kid I’m not sorry. "); // neutral, realization, approval
+p = t.t("America I used to be a communist when I was a kid I’m not sorry."); // neutral, realization, approval
 p = t.t("I smoke marijuana every chance I get."); // approval, neutral, amusement
 p = t.t("I sit in my house for days on end and stare at the roses in the closet."); // admiration, realization, pride
 p = t.t("When I go to Chinatown I get drunk and never get laid."); // neutral, realization, approval
@@ -111,7 +111,7 @@ p = t.t("I won’t say the Lord’s Prayer."); // disapproval, neutral, approval
 p = t.t("I have mystical visions and cosmic vibrations."); // neutral, surprise, excitement
 p = t.t("America I still haven’t told you what you did to Uncle Max after he came over from Russia."); // neutral
 p = t.t("I’m addressing you."); // neutral
-p = t.t("Are you going to let your emotional life be run by Time Magazine? "); // caring, curiosity, neutral
+p = t.t("Are you going to let your emotional life be run by Time Magazine?"); // caring, curiosity, neutral
 p = t.t("I’m obsessed by Time Magazine."); // desire, approval, love
 p = t.t("I read it every week."); // neutral, approval
 p = t.t("Its cover stares at me every time I slink past the corner candystore."); // neutral, annoyance
