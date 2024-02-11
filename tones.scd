@@ -6,7 +6,7 @@ s.waitForBoot {
 a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 
-SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
+SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1, fade = 1 |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
@@ -19,9 +19,9 @@ SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
     //sound = HPF.ar(sound, filterFreq, filterRes); // test
-	sound = FreeVerb.ar(sound, 0.5, 4) *0.1;
+	sound = FreeVerb.ar(sound, 0.5, 4) *fade;
 
-
+		// TODO: test later:
 	//FreeSelf.kr(Done.kr(sound, 2));
 	//DetectSilence.ar(sound, doneAction: 2);
 	//DetectSilence.ar(sound + Impulse.ar(0), doneAction: 2);
@@ -30,6 +30,7 @@ SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
     Out.ar(0, sound);
 }).add;
 
+	/*
 SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
@@ -53,7 +54,7 @@ SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
 
     Out.ar(0, sound);
 }).add;
-
+*/
 
 s.sync;
 
@@ -88,10 +89,6 @@ h.stop;
 
 
 
-
-
-
-
 p = t.t("this is gratitude");
 
 
@@ -111,6 +108,7 @@ p = t.t("I won’t write my poem till I’m in my right mind."); // realization,
 p = t.t("America when will you be angelic?"); // curiosity, admiration
 p = t.t("When will you take off your clothes?"); // neutral, curiosity, annoyance
 p = t.t("When will you look at yourself through the grave?"); // neutral, curiosity, confusion
+// TODO: this line has problems??
 p = t.t("When will you be worthy of your million Trotskyites?"); //curiosity, confusion, annoyance
 p = t.t("America why are your libraries full of tears?"); // curiosity, confusion, neutral
 p = t.t("America when will you send your eggs to India?"); // curiosity, neutral
