@@ -30,32 +30,6 @@ SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filte
     Out.ar(0, sound);
 }).add;
 
-	/*
-SynthDef(\samplePlayer2, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1 |
-
-    var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
-    var playbackRate = rate * lfo;
-
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0, /*doneAction: Done.freeGroup*/);
-	sound = sound *  amp;
-
-	// delay
-	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
-
-	sound = LPF.ar(sound, filterFreq, filterRes);
-    //sound = HPF.ar(sound, filterFreq, filterRes); // test
-	sound = FreeVerb.ar(sound, 0.5, 4) *0.1;
-
-
-	//FreeSelf.kr(Done.kr(sound, 2));
-	//DetectSilence.ar(sound, doneAction: 2);
-	//DetectSilence.ar(sound + Impulse.ar(0), doneAction: 2);
-	//FreeSelf.kr(DetectSilence.ar(sound + Impulse.ar(0)).product);
-
-    Out.ar(0, sound);
-}).add;
-*/
-
 s.sync;
 
 //t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
@@ -92,11 +66,7 @@ h.stop;
 p = t.t("this is gratitude");
 
 
-
-Pdef(\pSample5).isPlaying
-
 // "America" - Allen Ginsberg
-
 p = t.t("America I have given you all and now I am nothing.", 1); // disappointment, gratitude
 p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1); // neutral, approval
 p = t.t("I can’t stand my own mind.", 1); // disapproval, anger, annoyance, neutral, disappointment
