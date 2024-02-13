@@ -6,20 +6,20 @@ s.waitForBoot {
 a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 
-SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0.7, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 0, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, gate = 1, fade = 1 |
+SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 1, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, fade = 1, start |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
 
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: gate, startPos: 0, /*doneAction: Done.freeGroup*/);
+	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: start, /*doneAction: Done.freeGroup*/);
 	sound = sound *  amp;
 
 	// delay
 	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
-    //sound = HPF.ar(sound, filterFreq, filterRes);
-	sound = FreeVerb.ar(sound, 0.5, 4) *fade;
+    //sound = HPF.ar(sound, 200, 1);
+	sound = FreeVerb.ar(sound, 0.3, 2) *fade;
 
     Out.ar(0, sound);
 }).add;
@@ -61,7 +61,7 @@ h.stop;
 p = t.t("America I have given you all and now I am nothing.", 1); // disappointment, gratitude
 p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1); // neutral, approval
 p = t.t("I can’t stand my own mind.", 1); // disapproval, anger, annoyance, neutral, disappointment
-p = t.t("America when will we end the human war?", 1); // curiosity, confusion
+p = t.t("America when will we end the human war?", 1); // TODO: curiosity, confusion
 p = t.t("Go fuck yourself with your atom bomb.", 1); // anger, neutral, fear
 // ------- static sample change, add secondary tone
 p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief
@@ -69,7 +69,6 @@ p = t.t("I won’t write my poem till I’m in my right mind."); // realization,
 p = t.t("America when will you be angelic?"); // curiosity, admiration
 p = t.t("When will you take off your clothes?"); // neutral, curiosity, annoyance
 p = t.t("When will you look at yourself through the grave?"); // neutral, curiosity, confusion
-// TODO: this line has problems??
 p = t.t("When will you be worthy of your million Trotskyites?"); //curiosity, confusion, annoyance
 p = t.t("America why are your libraries full of tears?"); // curiosity, confusion, neutral
 p = t.t("America when will you send your eggs to India?"); // curiosity, neutral
@@ -110,8 +109,6 @@ p = t.t("I read it in the basement of the Berkeley Public Library."); // neutral
 p = t.t("It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me."); // neutral, annoyance, realization
 p = t.t("It occurs to me that I am America."); // realization, neutral
 p = t.t("I am talking to myself again."); // neutral
-
-
 
 
 p.at(\p1).stop;

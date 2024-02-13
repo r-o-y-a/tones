@@ -34,9 +34,13 @@ Toner {
 		if (~currentSynths.notNil) {
 
 			var newSynths, newGroup;
-			var endTime = 4;
-			var steps = 100;
+			var endTime = 1;
+			var steps = 60;
 			var stepTime = endTime / steps;
+
+			var fadeInSteps = 100;
+			var increment = 1 / fadeInSteps;
+			var currentFade = 0;
 
 			//currentGroup.postln;
 
@@ -54,22 +58,35 @@ Toner {
 					stepTime.wait;
 				};
 
-				previousGroup.set(\amp, 0);
-				previousGroup.set(\gate, 0);
+
+				// new synths replace currently playing
+				// todo: not 100% since the sound starts as soon as the synths are created
+				newSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
+				newGroup = newSynths.at(\group);
+				~currentSynths = newSynths;
+				{
+					steps.do {
+						stepTime.wait;
+						currentFade = currentFade + increment;
+
+						newGroup.set(\fade, currentFade);
+
+						stepTime.wait;
+					};
+
+				}.fork();
+
+
+
+				//previousGroup.set(\amp, 0);
+				//previousGroup.set(\loop, 0);
 				previousGroup.free;
-
-				//previousGroup.queryAllNodes.postln;
-
 				"group end".postln;
 
 			}.fork();
 
 
-			// create the new synths to replace the currently playing
-			newSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
-			newGroup = newSynths.at(\group);
-			~currentSynths = newSynths;
-			//newGroup.postln;
+
 
 
 		} {
@@ -263,237 +280,6 @@ Toner {
 		x = (cmd + "\"" ++ text ++ "\"");
 		x = x.unixCmdGetStdOut;
 		textTones = x.replace("\n", replace:"");
-
-		^textTones;
-	}
-
-	getTonesFromStatic { | text, hideSecondary, runOffline |
-		var textTones;
-
-		switch(text,
-			"America I have given you all and now I am nothing.", {
-				textTones = "disappointment, gratitude";
-			},
-			"America two dollars and twentyseven cents January 17, 1956.", {
-				textTones = "neutral, approval";
-			},
-			"I can’t stand my own mind.", {
-				textTones = "disapproval, anger";
-			},
-			"America when will we end the human war?", {
-				textTones = "curiosity, confusion";
-			},
-			"Go fuck yourself with your atom bomb.", {
-				textTones = "anger, neutral";
-			},
-			"I don’t feel good don’t bother me.", {
-				textTones = "approval, optimism";
-			},
-			"I won’t write my poem till I’m in my right mind.", {
-				textTones = "realization, neutral";
-			},
-			"America when will you be angelic?", {
-				textTones = "curiosity, admiration";
-			},
-			"When will you take off your clothes?", {
-				textTones = "neutral, curiosity";
-			},
-			"When will you look at yourself through the grave?", {
-				textTones = "neutral, curiosity";
-			},
-			"When will you be worthy of your million Trotskyites?", {
-				textTones = "curiosity, confusion";
-			},
-			"America why are your libraries full of tears?", {
-				textTones = "curiosity, confusion";
-			},
-			"America when will you send your eggs to India?", {
-				textTones = "curiosity, neutral";
-			},
-			"I’m sick of your insane demands.", {
-				textTones = "annoyance, anger";
-			},
-			"When can I go into the supermarket and buy what I need with my good looks?", {
-				textTones = "curiosity, neutral";
-			},
-			"America after all it is you and I who are perfect not the next world.", {
-				textTones = "neutral, annoyance";
-			},
-			"Your machinery is too much for me.", {
-				textTones = "love, admiration";
-			},
-			"You made me want to be a saint.", {
-				textTones = "admiration, desire";
-			},
-			"There must be some other way to settle this argument.", {
-				textTones = "confusion, disapproval";
-			},
-			"Burroughs is in Tangiers I don’t think he’ll come back it’s sinister.", {
-				textTones = "disapproval, neutral";
-			},
-			"Are you being sinister or is this some form of practical joke?", {
-				textTones = "curiosity, confusion";
-			},
-			"I’m trying to come to the point.", {
-				textTones = "desire, neutral";
-			},
-			"I refuse to give up my obsession.", {
-				textTones = "disapproval, approval";
-			},
-			"America stop pushing I know what I’m doing.", {
-				textTones = "annoyance, neutral";
-			},
-			"America the plum blossoms are falling.", {
-				textTones = "neutral, sadness";
-			},
-			"I haven’t read the newspapers for months, everyday somebody goes on trial for murder.", {
-				textTones = "disapproval, neutral";
-			},
-			"America I feel sentimental about the Wobblies.", {
-				textTones = "sadness, grief";
-			},
-			"America I used to be a communist when I was a kid I’m not sorry.", {
-				textTones = "neutral, realization";
-			},
-			"I smoke marijuana every chance I get.", {
-				textTones = "approval, neutral";
-			},
-			"I sit in my house for days on end and stare at the roses in the closet.", {
-				textTones = "admiration, realization";
-			},
-			"When I go to Chinatown I get drunk and never get laid.", {
-				textTones = "neutral, realization";
-			},
-			"My mind is made up there’s going to be trouble.", {
-				textTones = "fear, nervousness";
-			},
-			"You should have seen me reading Marx.", {
-				textTones = "neutral";
-			},
-			"My psychoanalyst thinks I’m perfectly right.", {
-				textTones = "neutral, approval";
-			},
-			"I won’t say the Lord’s Prayer.", {
-				textTones = "disapproval, neutral";
-			},
-			"I have mystical visions and cosmic vibrations.", {
-				textTones = "neutral, surprise,";
-			},
-			"America I still haven’t told you what you did to Uncle Max after he came over from Russia.", {
-				textTones = "neutral";
-			},
-			"I’m addressing you.", {
-				textTones = "neutral";
-			},
-			"Are you going to let your emotional life be run by Time Magazine?", {
-				textTones = "caring, curiosity";
-			},
-			"I’m obsessed by Time Magazine.", {
-				textTones = "desire, approval";
-			},
-			"I read it every week.", {
-				textTones = "neutral, approval";
-			},
-			"Its cover stares at me every time I slink past the corner candystore.", {
-				textTones = "neutral, annoyance";
-			},
-			"I read it in the basement of the Berkeley Public Library.", {
-				textTones = "neutral, approval";
-			},
-			"It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me.", {
-				textTones = "neutral, annoyance";
-			},
-			"It occurs to me that I am America.", {
-				textTones = "realization, neutral";
-			},
-			"I am talking to myself again.", {
-				textTones = "neutral";
-			},
-			"admiration", {
-				textTones = "admiration";
-			},
-			"amusement", {
-				textTones = "amusement";
-			},
-			"anger", {
-				textTones = "anger";
-			},
-			"annoyance", {
-				textTones = "annoyance";
-			},
-			"approval", {
-				textTones = "approval";
-			},
-			"caring", {
-				textTones = "caring";
-			},
-			"confusion", {
-				textTones = "confusion";
-			},
-			"curiosity", {
-				textTones = "curiosity";
-			},
-			"desire", {
-				textTones = "desire";
-			},
-			"disappointment", {
-				textTones = "disappointment";
-			},
-			"disapproval", {
-				textTones = "disapproval";
-			},
-			"disgust", {
-				textTones = "disgust";
-			},
-			"embarrassment", {
-				textTones = "embarrassment";
-			},
-			"excitement", {
-				textTones = "excitement";
-			},
-			"fear", {
-				textTones = "fear";
-			},
-			"gratitude", {
-				textTones = "gratitude";
-			},
-			"grief", {
-				textTones = "grief";
-			},
-			"joy", {
-				textTones = "joy";
-			},
-			"love", {
-				textTones = "love";
-			},
-			"nervousness", {
-				textTones = "nervousness";
-			},
-			"optimism", {
-				textTones = "optimism";
-			},
-			"pride", {
-				textTones = "pride";
-			},
-			"realization", {
-				textTones = "realization";
-			},
-			"relief", {
-				textTones = "relief";
-			},
-			"remorse", {
-				textTones = "remorse";
-			},
-			"sadness", {
-				textTones = "sadness";
-			},
-			"surprise", {
-				textTones = "surprise";
-			},
-			"neutral", {
-				textTones = "neutral";
-			},
-		);
 
 		^textTones;
 	}
@@ -1349,14 +1135,14 @@ Toner {
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\amp, [0.2]);
+				presets[4].put(\amp, [0.03]);
 				presets[4].put(\filterFreq, 3000);
-				presets[4].put(\filterRes, 4);
+				presets[4].put(\filterRes, 10);
 				presets[4].put(\start, 0);
 				presets[4].put(\end, 1);
 				presets[4].put(\loop, 1);
 				presets[4].put(\lfoPseqValue, 0);
-				presets[4].put(\reverbMix, 1);
+				presets[4].put(\reverbMix, 0);
 				presets[4].put(\pitchShift, 0);
 				presets[4].put(\delayMaxTime, 0);
 				presets[4].put(\delayTime, 0);
@@ -1495,11 +1281,10 @@ Toner {
 		if (textTone == "disappointment") {
 				~rate = [[0.5], [1], [0], [0], [0]];
 
-				presets[0].put(\amp, [0.5]);
+				presets[0].put(\amp, [0.7]);
 				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
-				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
 				presets[0].put(\lfoPseqValue, 0);
 				presets[0].put(\reverbMix, 0.3);
@@ -1508,7 +1293,7 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.3]);
+				presets[1].put(\amp, [0.17]);
 				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
@@ -1524,7 +1309,6 @@ Toner {
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
-				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
 				presets[2].put(\reverbMix, 0.5);
@@ -1537,7 +1321,6 @@ Toner {
 				presets[3].put(\filterFreq, 500);
 				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);
-				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
 				presets[3].put(\lfoPseqValue, 0);
 				presets[3].put(\reverbMix, 0.5);
@@ -1550,7 +1333,6 @@ Toner {
 				presets[4].put(\filterFreq, 1500);
 				presets[4].put(\filterRes, 3);
 				presets[4].put(\start, 0);
-				presets[4].put(\end, 1);
 				presets[4].put(\loop, 1);
 				presets[4].put(\lfoPseqValue, 0);
 				presets[4].put(\reverbMix, 0.5);
@@ -1592,13 +1374,12 @@ Toner {
 		};
 
 		if (textTone == "disapproval") {
-				~rate = [[0], [0.5], [0.5], [1], [1]];
+				~rate = [[0.5], [0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], [0], [1], [1]];
 
-				presets[0].put(\amp, [0]);
+				presets[0].put(\amp, [0.4]);
 				presets[0].put(\filterFreq, 3000);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
-				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
 				presets[0].put(\lfoPseqValue, 0);
 				presets[0].put(\reverbMix, 7);
@@ -1611,7 +1392,6 @@ Toner {
 				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 4);
 				presets[1].put(\start, 0);
-				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
 				presets[1].put(\reverbMix, 0.4);
@@ -1620,11 +1400,10 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\amp, [0.1]);
+				presets[2].put(\amp, [0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
-				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
 				presets[2].put(\reverbMix, 1);
@@ -1637,7 +1416,6 @@ Toner {
 				presets[3].put(\filterFreq, 500);
 				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);
-				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
 				presets[3].put(\lfoPseqValue, 0);
 				presets[3].put(\reverbMix, 1);
@@ -2970,40 +2748,37 @@ Toner {
 		};
 
 		if (textTone == "neutral") {
-				~rate = [[1.5], [2], [3], [0], [0]];
+				~rate = [[1], [1], [0], [0], [0]];
 
-				presets[0].put(\amp, [0.5]);
+				presets[0].put(\amp, [0.8]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
-				presets[0].put(\end, 1);
 				presets[0].put(\loop, 1);
 				presets[0].put(\lfoPseqValue, 0);
-				presets[0].put(\reverbMix, 1);
+				presets[0].put(\reverbMix, 0);
 				presets[0].put(\pitchShift, 0);
 				presets[0].put(\delayMaxTime, 0);
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.2]);
-				presets[1].put(\filterFreq, 1500);
+				presets[1].put(\amp, [0.1]);
+				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
-				presets[1].put(\end, 1);
 				presets[1].put(\loop, 1);
 				presets[1].put(\lfoPseqValue, 0);
-				presets[1].put(\reverbMix, 1);
+				presets[1].put(\reverbMix, 0.4);
 				presets[1].put(\pitchShift, 0);
 				presets[1].put(\delayMaxTime, 0);
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\amp, [0.4]);
+				presets[2].put(\amp, [0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
-				presets[2].put(\end, 1);
-				presets[2].put(\loop, 1);
+				presets[2].put(\loop, 0);
 				presets[2].put(\lfoPseqValue, 0);
 				presets[2].put(\reverbMix, 4);
 				presets[2].put(\pitchShift, 0);
@@ -3015,7 +2790,6 @@ Toner {
 				presets[3].put(\filterFreq, 1500);
 				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);
-				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
 				presets[3].put(\lfoPseqValue, 0);
 				presets[3].put(\reverbMix, 1);
@@ -3028,7 +2802,6 @@ Toner {
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
 				presets[4].put(\start, 0);
-				presets[4].put(\end, 1);
 				presets[4].put(\loop, 1);
 				presets[4].put(\lfoPseqValue, 0);
 				presets[4].put(\reverbMix, 4);
@@ -3357,5 +3130,236 @@ Toner {
 		allPresets = [presets, secondaryPresets];
 
 		^allPresets;
+	}
+
+	getTonesFromStatic { | text, hideSecondary, runOffline |
+		var textTones;
+
+		switch(text,
+			"America I have given you all and now I am nothing.", {
+				textTones = "disappointment, gratitude";
+			},
+			"America two dollars and twentyseven cents January 17, 1956.", {
+				textTones = "neutral, approval";
+			},
+			"I can’t stand my own mind.", {
+				textTones = "disapproval, anger";
+			},
+			"America when will we end the human war?", {
+				textTones = "curiosity, confusion";
+			},
+			"Go fuck yourself with your atom bomb.", {
+				textTones = "anger, neutral";
+			},
+			"I don’t feel good don’t bother me.", {
+				textTones = "approval, optimism";
+			},
+			"I won’t write my poem till I’m in my right mind.", {
+				textTones = "realization, neutral";
+			},
+			"America when will you be angelic?", {
+				textTones = "curiosity, admiration";
+			},
+			"When will you take off your clothes?", {
+				textTones = "neutral, curiosity";
+			},
+			"When will you look at yourself through the grave?", {
+				textTones = "neutral, curiosity";
+			},
+			"When will you be worthy of your million Trotskyites?", {
+				textTones = "curiosity, confusion";
+			},
+			"America why are your libraries full of tears?", {
+				textTones = "curiosity, confusion";
+			},
+			"America when will you send your eggs to India?", {
+				textTones = "curiosity, neutral";
+			},
+			"I’m sick of your insane demands.", {
+				textTones = "annoyance, anger";
+			},
+			"When can I go into the supermarket and buy what I need with my good looks?", {
+				textTones = "curiosity, neutral";
+			},
+			"America after all it is you and I who are perfect not the next world.", {
+				textTones = "neutral, annoyance";
+			},
+			"Your machinery is too much for me.", {
+				textTones = "love, admiration";
+			},
+			"You made me want to be a saint.", {
+				textTones = "admiration, desire";
+			},
+			"There must be some other way to settle this argument.", {
+				textTones = "confusion, disapproval";
+			},
+			"Burroughs is in Tangiers I don’t think he’ll come back it’s sinister.", {
+				textTones = "disapproval, neutral";
+			},
+			"Are you being sinister or is this some form of practical joke?", {
+				textTones = "curiosity, confusion";
+			},
+			"I’m trying to come to the point.", {
+				textTones = "desire, neutral";
+			},
+			"I refuse to give up my obsession.", {
+				textTones = "disapproval, approval";
+			},
+			"America stop pushing I know what I’m doing.", {
+				textTones = "annoyance, neutral";
+			},
+			"America the plum blossoms are falling.", {
+				textTones = "neutral, sadness";
+			},
+			"I haven’t read the newspapers for months, everyday somebody goes on trial for murder.", {
+				textTones = "disapproval, neutral";
+			},
+			"America I feel sentimental about the Wobblies.", {
+				textTones = "sadness, grief";
+			},
+			"America I used to be a communist when I was a kid I’m not sorry.", {
+				textTones = "neutral, realization";
+			},
+			"I smoke marijuana every chance I get.", {
+				textTones = "approval, neutral";
+			},
+			"I sit in my house for days on end and stare at the roses in the closet.", {
+				textTones = "admiration, realization";
+			},
+			"When I go to Chinatown I get drunk and never get laid.", {
+				textTones = "neutral, realization";
+			},
+			"My mind is made up there’s going to be trouble.", {
+				textTones = "fear, nervousness";
+			},
+			"You should have seen me reading Marx.", {
+				textTones = "neutral";
+			},
+			"My psychoanalyst thinks I’m perfectly right.", {
+				textTones = "neutral, approval";
+			},
+			"I won’t say the Lord’s Prayer.", {
+				textTones = "disapproval, neutral";
+			},
+			"I have mystical visions and cosmic vibrations.", {
+				textTones = "neutral, surprise,";
+			},
+			"America I still haven’t told you what you did to Uncle Max after he came over from Russia.", {
+				textTones = "neutral";
+			},
+			"I’m addressing you.", {
+				textTones = "neutral";
+			},
+			"Are you going to let your emotional life be run by Time Magazine?", {
+				textTones = "caring, curiosity";
+			},
+			"I’m obsessed by Time Magazine.", {
+				textTones = "desire, approval";
+			},
+			"I read it every week.", {
+				textTones = "neutral, approval";
+			},
+			"Its cover stares at me every time I slink past the corner candystore.", {
+				textTones = "neutral, annoyance";
+			},
+			"I read it in the basement of the Berkeley Public Library.", {
+				textTones = "neutral, approval";
+			},
+			"It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me.", {
+				textTones = "neutral, annoyance";
+			},
+			"It occurs to me that I am America.", {
+				textTones = "realization, neutral";
+			},
+			"I am talking to myself again.", {
+				textTones = "neutral";
+			},
+			"admiration", {
+				textTones = "admiration";
+			},
+			"amusement", {
+				textTones = "amusement";
+			},
+			"anger", {
+				textTones = "anger";
+			},
+			"annoyance", {
+				textTones = "annoyance";
+			},
+			"approval", {
+				textTones = "approval";
+			},
+			"caring", {
+				textTones = "caring";
+			},
+			"confusion", {
+				textTones = "confusion";
+			},
+			"curiosity", {
+				textTones = "curiosity";
+			},
+			"desire", {
+				textTones = "desire";
+			},
+			"disappointment", {
+				textTones = "disappointment";
+			},
+			"disapproval", {
+				textTones = "disapproval";
+			},
+			"disgust", {
+				textTones = "disgust";
+			},
+			"embarrassment", {
+				textTones = "embarrassment";
+			},
+			"excitement", {
+				textTones = "excitement";
+			},
+			"fear", {
+				textTones = "fear";
+			},
+			"gratitude", {
+				textTones = "gratitude";
+			},
+			"grief", {
+				textTones = "grief";
+			},
+			"joy", {
+				textTones = "joy";
+			},
+			"love", {
+				textTones = "love";
+			},
+			"nervousness", {
+				textTones = "nervousness";
+			},
+			"optimism", {
+				textTones = "optimism";
+			},
+			"pride", {
+				textTones = "pride";
+			},
+			"realization", {
+				textTones = "realization";
+			},
+			"relief", {
+				textTones = "relief";
+			},
+			"remorse", {
+				textTones = "remorse";
+			},
+			"sadness", {
+				textTones = "sadness";
+			},
+			"surprise", {
+				textTones = "surprise";
+			},
+			"neutral", {
+				textTones = "neutral";
+			},
+		);
+
+		^textTones;
 	}
 }
