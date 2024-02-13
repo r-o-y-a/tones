@@ -91,7 +91,9 @@ Toner {
 
 		} {
 			// if no currently playing synths, create first ones
+			var group;
 			~currentSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
+			group = ~currentSynths.at(\group);
 		};
 
 		^~currentSynths;
@@ -984,9 +986,9 @@ Toner {
 
 
 		if (textTone == "approval") {
-				~rate = [[4], [2], [5, 6, 8], [1], [0]];
+				~rate = [[3, 3, 3, 3.5, 3.4, 4, 3.6, 4.5, 4, 4, 4, 4, 4, 4], [2], [0], [1], [0]];
 
-				presets[0].put(\amp, [0.5]);
+				presets[0].put(\amp, [0.4]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
@@ -999,7 +1001,7 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.1]);
+				presets[1].put(\amp, [0.02]);
 				presets[1].put(\filterFreq, 1500);
 				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
@@ -1012,7 +1014,7 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\amp, [0.5]);
+				presets[2].put(\amp, [0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
@@ -1081,7 +1083,7 @@ Toner {
 		};
 
 		if (textTone == "anger") {
-				~rate = [[1], [1.2, 1.2, 1, 1, 1, 1, 1, 1], [4], [1], [0.5]];
+				~rate = [[0], [0.6, 0.6, 0.6, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], [4, 4.1, 4.1, 4, 4, 4.1, 4, 4, 4], [1], [0.5]];
 
 				presets[0].put(\amp, [0]);
 				presets[0].put(\filterFreq, 3000);
@@ -1109,7 +1111,7 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\amp, [0.2]);
+				presets[2].put(\amp, [0.05]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
@@ -1281,13 +1283,13 @@ Toner {
 		if (textTone == "disappointment") {
 				~rate = [[0.5], [1], [0], [0], [0]];
 
-				presets[0].put(\amp, [0.7]);
-				presets[0].put(\filterFreq, 3000);
-				presets[0].put(\filterRes, 3);
+				presets[0].put(\amp, [0.6]);
+				presets[0].put(\filterFreq, 1);
+				presets[0].put(\filterRes, 1);
 				presets[0].put(\start, 0);
 				presets[0].put(\loop, 1);
 				presets[0].put(\lfoPseqValue, 0);
-				presets[0].put(\reverbMix, 0.3);
+				presets[0].put(\reverbMix, 0);
 				presets[0].put(\pitchShift, 0);
 				presets[0].put(\delayMaxTime, 0);
 				presets[0].put(\delayTime, 0);
@@ -2456,10 +2458,9 @@ Toner {
 		};
 
 		if (textTone == "realization") {
-				~rate = [[3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 3.5, 4.5], [1.5, 2.5, 2.5, 2.5, 2.5, 3.5], [5, 6, 8], [1], [1]];
+				~rate = [[3.5], [1], [0], [2], [4]];
 
-
-				presets[0].put(\amp, [0.3]);
+				presets[0].put(\amp, [0.04]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
@@ -2472,7 +2473,7 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.3]);
+				presets[1].put(\amp, [0.01]);
 				presets[1].put(\filterFreq, 1500);
 				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
@@ -2485,11 +2486,10 @@ Toner {
 				presets[1].put(\delayTime, 0);
 				presets[1].put(\decayTime, 0);
 
-				presets[2].put(\amp, [0.5]);
+				presets[2].put(\amp, [0]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
-				presets[2].put(\end, 1);
 				presets[2].put(\loop, 1);
 				presets[2].put(\lfoPseqValue, 0);
 				presets[2].put(\reverbMix, 4);
@@ -2498,22 +2498,22 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\amp, [0]);
+				presets[3].put(\amp, [0.05]);
 				presets[3].put(\start, 0);
-				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
-				presets[3].put(\lfoPseqValue, 0);
+				presets[3].put(\filterFreq, 500);
+				presets[3].put(\filterRes, 3);
+			    presets[3].put(\lfoPseqValue, 0);
 				presets[3].put(\reverbMix, 1);
 				presets[3].put(\pitchShift, 0);
 				presets[3].put(\delayMaxTime, 0);
 				presets[3].put(\delayTime, 0);
 				presets[3].put(\decayTime, 0);
 
-				presets[4].put(\amp, [0.5]);
+				presets[4].put(\amp, [0.4]);
 				presets[4].put(\filterFreq, 500);
 				presets[4].put(\filterRes, 3);
 				presets[4].put(\start, 0);
-				presets[4].put(\end, 1);
 				presets[4].put(\loop, 1);
 				presets[4].put(\lfoPseqValue, 0);
 				presets[4].put(\reverbMix, 4);
@@ -2650,9 +2650,9 @@ Toner {
 		};
 
 		if (textTone == "curiosity") {
-				~rate = [[2.5, 2.5, 2.5, 3, 3, 2.5, 3.8, 3.8, 2.5], [2, 2, 2, 2, 2, 2, 3, 3, 3], [5, 6, 8], [1], [0]];
+				~rate = [[2.5, 2.5, 2.5, 3, 3, 2.5, 3.8, 3.8, 2.5], [1], [3, 8, 3], [1], [0]];
 
-				presets[0].put(\amp, [0.5]);
+				presets[0].put(\amp, [0.4]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
@@ -2665,7 +2665,7 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.5]);
+				presets[1].put(\amp, [0.2]);
 				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 1);
 				presets[1].put(\start, 0);
@@ -2678,7 +2678,7 @@ Toner {
 				presets[1].put(\delayTime, 5);
 				presets[1].put(\decayTime, 5);
 
-				presets[2].put(\amp, [0.5]);
+				presets[2].put(\amp, [0.4]);
 				presets[2].put(\filterFreq, 500);
 				presets[2].put(\filterRes, 3);
 				presets[2].put(\start, 0);
@@ -2691,7 +2691,7 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\amp, [0]);
+				presets[3].put(\amp, [0.9]);
 				presets[3].put(\start, 0);
 				presets[3].put(\end, 1);
 				presets[3].put(\loop, 1);
@@ -2748,9 +2748,9 @@ Toner {
 		};
 
 		if (textTone == "neutral") {
-				~rate = [[1], [1], [0], [0], [0]];
+				~rate = [[1], [0], [0], [1], [0]];
 
-				presets[0].put(\amp, [0.8]);
+				presets[0].put(\amp, [0.9]);
 				presets[0].put(\filterFreq, 1500);
 				presets[0].put(\filterRes, 3);
 				presets[0].put(\start, 0);
@@ -2762,7 +2762,7 @@ Toner {
 				presets[0].put(\delayTime, 0);
 				presets[0].put(\decayTime, 0);
 
-				presets[1].put(\amp, [0.1]);
+				presets[1].put(\amp, [0]);
 				presets[1].put(\filterFreq, 3000);
 				presets[1].put(\filterRes, 3);
 				presets[1].put(\start, 0);
@@ -2786,7 +2786,7 @@ Toner {
 				presets[2].put(\delayTime, 0.1);
 				presets[2].put(\decayTime, 4);
 
-				presets[3].put(\amp, [0.2]);
+				presets[3].put(\amp, [0.15]);
 				presets[3].put(\filterFreq, 1500);
 				presets[3].put(\filterRes, 3);
 				presets[3].put(\start, 0);

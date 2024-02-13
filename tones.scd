@@ -6,7 +6,7 @@ s.waitForBoot {
 a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
 ~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 
-SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 1, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, fade = 1, start |
+SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 1, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, fade = 1, start = 0 |
 
     var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
     var playbackRate = rate * lfo;
@@ -19,7 +19,7 @@ SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterF
 
 	sound = LPF.ar(sound, filterFreq, filterRes);
     //sound = HPF.ar(sound, 200, 1);
-	sound = FreeVerb.ar(sound, 0.3, 2) *fade;
+	sound = FreeVerb.ar(sound, 0.3, reverbMix) *fade;
 
     Out.ar(0, sound);
 }).add;
@@ -32,36 +32,11 @@ t = Toner.new(\samplePlayer1, \samplePlayer2);
 );
 
 
-
-// static sample
-(
-h = Pdef(\pSample6, Pmono(
-    \samplePlayer1,
-    \bufnum, ~buffers[7].bufnum,
-	\rate, 1,
-	\lfoFreq, 0, //1
-    \amp, 1,
-	\filterFreq, 10000,
-	\filterRes, 5,
-	\loop, 1,
-    \reverbMix, 0.3,
-	\pitchShift, 0,
-	\delayMaxTime, 0,
-	\delayTime, 0,
-	\decayTime, 0
-));
-h.play;
-)
-h.stop;
-
-
-
-
 // "America" - Allen Ginsberg
 p = t.t("America I have given you all and now I am nothing.", 1); // disappointment, gratitude
 p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1); // neutral, approval
 p = t.t("I can’t stand my own mind.", 1); // disapproval, anger, annoyance, neutral, disappointment
-p = t.t("America when will we end the human war?", 1); // TODO: curiosity, confusion
+p = t.t("America when will we end the human war?", 1); // curiosity, confusion
 p = t.t("Go fuck yourself with your atom bomb.", 1); // anger, neutral, fear
 // ------- static sample change, add secondary tone
 p = t.t("I don’t feel good don’t bother me."); // approval, optimism, relief
@@ -118,3 +93,39 @@ p.at(\p4).stop;
 p.at(\p5).stop;
 
 
+
+
+
+
+
+
+
+
+(
+var group = Group.after;
+
+// static sample
+
+h = Pdef(\pSample1,
+	Pmono(
+    \samplePlayer1,
+	\group, group,
+    \bufnum, ~buffers[0].bufnum,
+	\rate, 1,
+	\lfoFreq, 0, //1
+    \amp, 1,
+	\filterFreq, 10000,
+	\filterRes, 5,
+	\loop, 1,
+    \reverbMix, 0.3,
+	\pitchShift, 0,
+	\delayMaxTime, 0,
+	\delayTime, 0,
+	\decayTime, 0
+));
+h.play;
+
+group.set(\amp, 0);
+)
+
+h.stop;
