@@ -1,35 +1,38 @@
 (
 s.waitForBoot {
 
-~rate = [];
+	~rate = [];
 
-a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
-~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
+	a = PathName(thisProcess.nowExecutingPath).pathOnly ++ "samples/";
+	~buffers = PathName(a).entries.collect{|path| Buffer.read(s, path.fullPath)};
 
-SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 1, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, fade = 1, start = 0 |
+	SynthDef(\samplePlayer1, { | bufnum = 0, rate = 1, amp = 0, lfoFreq = 1, filterFreq = 1000, filterRes = 0.5, loop = 1, reverbMix = 0.5, pitchShift = 1, delayMaxTime = 0, delayTime = 0, decayTime = 0, fade = 1, start = 0 |
 
-    var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
-    var playbackRate = rate * lfo;
+		var lfo = SinOsc.kr(lfoFreq).range(0.8, 1.2);
+		var playbackRate = rate * lfo;
 
-	var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: start, /*doneAction: Done.freeGroup*/);
-	sound = sound *  amp;
+		var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: start, /*doneAction: Done.freeGroup*/);
+		sound = sound *  amp;
 
-	// delay
-	sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
+		// delay
+		sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
-	sound = LPF.ar(sound, filterFreq, filterRes);
-    //sound = HPF.ar(sound, 200, 1);
-	sound = FreeVerb.ar(sound, 0.3, reverbMix) *fade;
+		sound = LPF.ar(sound, filterFreq, filterRes);
+		//sound = HPF.ar(sound, 200, 1);
+		sound = FreeVerb.ar(sound, 0.3, reverbMix) *fade;
 
-    Out.ar(0, sound);
-}).add;
+		//Out.ar(0, sound*fade);
+		Out.ar(0, sound*fade);
+	}).add;
 
-s.sync;
+	s.sync;
 
-//t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
-t = Toner.new(\samplePlayer1, \samplePlayer2);
+	//t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
+	t = Toner.new(\samplePlayer1, \samplePlayer2);
 }
 );
+
+
 
 
 // "America" - Allen Ginsberg
@@ -99,17 +102,16 @@ p.at(\p5).stop;
 
 
 
-
-
 (
-var group = Group.after;
+~sources = Group.new;
+~effects = Group.new;
+//~bus = Bus.audio(s, 2);         // this will be our stereo effects bus
 
-// static sample
 
 h = Pdef(\pSample1,
 	Pmono(
     \samplePlayer1,
-	\group, group,
+	\group, ~effects,
     \bufnum, ~buffers[0].bufnum,
 	\rate, 1,
 	\lfoFreq, 0, //1
@@ -125,7 +127,35 @@ h = Pdef(\pSample1,
 ));
 h.play;
 
-group.set(\amp, 0);
+
+x = Pdef(\pSample2,
+	Pmono(
+    \samplePlayer1,
+	\group, ~sources,
+    \bufnum, ~buffers[1].bufnum,
+	\rate, 1,
+	\lfoFreq, 0, //1
+    \amp, 1,
+	\filterFreq, 10000,
+	\filterRes, 5,
+	\loop, 1,
+    \reverbMix, 0.3,
+	\pitchShift, 0,
+	\delayMaxTime, 0,
+	\delayTime, 0,
+	\decayTime, 0
+));
+x.play;
+
 )
+
+(
+~effects.queryTree({|msg|
+	msg.postln;
+
+
+});
+)
+
 
 h.stop;

@@ -1,10 +1,12 @@
 Toner {
 	var synthdef, synthdef2, runOffline = false;
 	var presets, secondaryPresets, allPresets, patterns;
-	var currentGroup, previousGroup;
+	var activeGroup = 1;
 
     *new {
-        arg synthDef, synthDef2, runOffline;
+		arg synthDef, synthDef2, runOffline;
+		~group1 = Group.new;
+		~group2 = Group.new;
 		^super.newCopyArgs(synthDef, synthDef2, runOffline);
     }
 
@@ -14,6 +16,10 @@ Toner {
 		var textTones = this.getTonesFromText(text, hideSecondary, runOffline);
 
 		var tones = textTones.split($,);
+
+
+
+
 		primaryTextTone = tones[0];
 		secondaryTextTone = tones[1];
 
@@ -35,65 +41,48 @@ Toner {
 
 			var newSynths, newGroup;
 			var endTime = 1;
-			var steps = 60;
+			var steps = 150;
 			var stepTime = endTime / steps;
 
 			var fadeInSteps = 100;
 			var increment = 1 / fadeInSteps;
 			var currentFade = 0;
 
-			//currentGroup.postln;
+			var fadeGroup;
 
-			previousGroup = currentGroup.copy;
 
+			fadeGroup = activeGroup;
+
+
+			if (activeGroup == 1) {
+				activeGroup = 2;
+			} {
+				activeGroup = 1;
+			};
+
+			newSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
+			~currentSynths = newSynths;
 
 			// decrease volume of current group
 			{
+
 				steps.do { |i|
 					var currentAmp = 1.0 - (i / steps);
 
-					//previousGroup.set(\amp, currentAmp);
-					previousGroup.set(\fade, currentAmp);
+					if (fadeGroup == 1) {
+						~group1.set(\fade, currentAmp);
+					} {
+						~group2.set(\fade, currentAmp);
+					};
 
 					stepTime.wait;
 				};
 
-
-				// new synths replace currently playing
-				// todo: not 100% since the sound starts as soon as the synths are created
-				newSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
-				newGroup = newSynths.at(\group);
-				~currentSynths = newSynths;
-				{
-					steps.do {
-						stepTime.wait;
-						currentFade = currentFade + increment;
-
-						newGroup.set(\fade, currentFade);
-
-						stepTime.wait;
-					};
-
-				}.fork();
-
-
-
-				//previousGroup.set(\amp, 0);
-				//previousGroup.set(\loop, 0);
-				previousGroup.free;
-				"group end".postln;
-
 			}.fork();
-
-
-
-
 
 		} {
 			// if no currently playing synths, create first ones
-			var group;
 			~currentSynths = this.createSynths(allPresets, synthdef, synthdef2, playSecondary);
-			group = ~currentSynths.at(\group);
 		};
 
 		^~currentSynths;
@@ -106,13 +95,30 @@ Toner {
 		var patterns = Dictionary.new;
 		var primaryPresets = allPresets[0];
 		var secondaryPresets = allPresets[1];
-		currentGroup = Group.after;
+		var pmonoGroup;
+		var pdefName1, pdefName2, pdefName3, pdefName4, pdefName5;
 
 
-		p1 = Pdef(\pSample1,
+		if (activeGroup == 1) {
+			pmonoGroup = ~group1;
+			pdefName1 = \pSampleA1;
+			pdefName2 = \pSampleA2;
+			pdefName3 = \pSampleA3;
+			pdefName4 = \pSampleA4;
+			pdefName5 = \pSampleA5;
+		} {
+			pmonoGroup = ~group2;
+			pdefName1 = \pSampleB1;
+			pdefName2 = \pSampleB2;
+			pdefName3 = \pSampleB3;
+			pdefName4 = \pSampleB4;
+			pdefName5 = \pSampleB5;
+		};
+
+		p1 = Pdef(pdefName1,
 			Pmono(
 				synthdef,
-				\group, currentGroup,
+				\group, pmonoGroup,
 				\bufnum, ~buffers[0].bufnum,
 				\rate, Pseq(~rate[0], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[0].at(\lfoPseqValue) }], inf),
@@ -131,10 +137,10 @@ Toner {
 		p1.play;
 
 
-		p2 = Pdef(\pSample2,
+		p2 = Pdef(pdefName2,
 			Pmono(
 				synthdef,
-				\group, currentGroup,
+				\group, pmonoGroup,
 				\bufnum, ~buffers[1].bufnum,
 				\rate, Pseq(~rate[1], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[1].at(\lfoPseqValue) }], inf),
@@ -152,10 +158,10 @@ Toner {
 		patterns.put(\p2, p2);
 		p2.play;
 
-		p3 = Pdef(\pSample3,
+		p3 = Pdef(pdefName3,
 			Pmono(
 				synthdef,
-				\group, currentGroup,
+				\group, pmonoGroup,
 				\bufnum, ~buffers[2].bufnum,
 				\rate, Pseq(~rate[2], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[2].at(\lfoPseqValue) }], inf),
@@ -174,10 +180,10 @@ Toner {
 		p3.play;
 
 
-		p4 = Pdef(\pSample4,
+		p4 = Pdef(pdefName4,
 			Pmono(
 				synthdef,
-				\group, currentGroup,
+				\group, pmonoGroup,
 				\bufnum, ~buffers[3].bufnum,
 				\rate, Pseq(~rate[3], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[3].at(\lfoPseqValue) }], inf),
@@ -196,10 +202,10 @@ Toner {
 		p4.play;
 
 
-		p5 = Pdef(\pSample5,
+		p5 = Pdef(pdefName5,
 			Pmono(
 				synthdef,
-				\group, currentGroup,
+				\group, pmonoGroup,
 				\bufnum, ~buffers[4].bufnum,
 				\rate, Pseq(~rate[4], inf),
 				\lfoFreq, Pseq([ Pfunc { primaryPresets[4].at(\lfoPseqValue) }], inf),
@@ -268,7 +274,6 @@ Toner {
 		};
 		*/
 
-		patterns.put(\group, currentGroup); // also return the current group
 
 		^patterns;
 	}
