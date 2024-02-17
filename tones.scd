@@ -27,15 +27,21 @@ s.waitForBoot {
 
 	s.sync;
 
-	//t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
-	t = Toner.new(\samplePlayer1, \samplePlayer2);
+	t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
+	//t = Toner.new(\samplePlayer1, \samplePlayer2);
 }
 );
 
-
+p.at(\p1).stop;
+p.at(\p2).stop;
+p.at(\p3).stop;
+p.at(\p4).stop;
+p.at(\p5).stop;
 
 
 // "America" - Allen Ginsberg
+// Used with Permission from the Estate of Allen Ginsberg
+
 p = t.t("America I have given you all and now I am nothing.", 1); // disappointment, gratitude
 p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1); // neutral, approval
 p = t.t("I can’t stand my own mind.", 1); // disapproval, anger, annoyance, neutral, disappointment
@@ -89,11 +95,6 @@ p = t.t("It occurs to me that I am America."); // realization, neutral
 p = t.t("I am talking to myself again."); // neutral
 
 
-p.at(\p1).stop;
-p.at(\p2).stop;
-p.at(\p3).stop;
-p.at(\p4).stop;
-p.at(\p5).stop;
 
 
 

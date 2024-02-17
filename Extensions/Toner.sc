@@ -1,24 +1,25 @@
 Toner {
-	var synthdef, synthdef2, runOffline = false;
+	var synthdef, synthdef2, offline = false;
 	var presets, secondaryPresets, allPresets, patterns;
 	var activeGroup = 1;
 
     *new {
-		arg synthDef, synthDef2, runOffline;
+		arg synthDef, synthDef2, offline;
 		~group1 = Group.new;
 		~group2 = Group.new;
-		^super.newCopyArgs(synthDef, synthDef2, runOffline);
+		^super.newCopyArgs(synthDef, synthDef2, offline);
     }
 
 	t { | text, hideSecondary, runOffline |
-		var allPresets, patterns, playSecondary;
+		var allPresets, patterns, playSecondary, tones, textTones;
 		var primaryTextTone, secondaryTextTone;
-		var textTones = this.getTonesFromText(text, hideSecondary, runOffline);
 
-		var tones = textTones.split($,);
+		if (offline == true) {
+			runOffline = 1;
+		};
 
-
-
+		textTones = this.getTonesFromText(text, hideSecondary, runOffline);
+		tones = textTones.split($,);
 
 		primaryTextTone = tones[0];
 		secondaryTextTone = tones[1];
@@ -295,6 +296,7 @@ Toner {
 		var textTones, b;
 		var textTone, secondaryTextTone;
 
+		"retrieving tone....".postln;
 
 		if (runOffline == false || runOffline.isNil) {
 			textTones = this.getTonesFromApi(text);
@@ -3150,6 +3152,9 @@ Toner {
 			"I can’t stand my own mind.", {
 				textTones = "disapproval, anger";
 			},
+			"I can't stand my own mind.", {
+				textTones = "disapproval, anger";
+			},
 			"America when will we end the human war?", {
 				textTones = "curiosity, confusion";
 			},
@@ -3159,7 +3164,13 @@ Toner {
 			"I don’t feel good don’t bother me.", {
 				textTones = "approval, optimism";
 			},
+			"I don't feel good don't bother me.", {
+				textTones = "approval, optimism";
+			},
 			"I won’t write my poem till I’m in my right mind.", {
+				textTones = "realization, neutral";
+			},
+			"I won't write my poem till I'm in my right mind.", {
 				textTones = "realization, neutral";
 			},
 			"America when will you be angelic?", {
@@ -3183,6 +3194,9 @@ Toner {
 			"I’m sick of your insane demands.", {
 				textTones = "annoyance, anger";
 			},
+			"I'm sick of your insane demands.", {
+				textTones = "annoyance, anger";
+			},
 			"When can I go into the supermarket and buy what I need with my good looks?", {
 				textTones = "curiosity, neutral";
 			},
@@ -3201,10 +3215,16 @@ Toner {
 			"Burroughs is in Tangiers I don’t think he’ll come back it’s sinister.", {
 				textTones = "disapproval, neutral";
 			},
+			"Burroughs is in Tangiers I don't think he'll come back it's sinister.", {
+				textTones = "disapproval, neutral";
+			},
 			"Are you being sinister or is this some form of practical joke?", {
 				textTones = "curiosity, confusion";
 			},
 			"I’m trying to come to the point.", {
+				textTones = "desire, neutral";
+			},
+			"I'm trying to come to the point.", {
 				textTones = "desire, neutral";
 			},
 			"I refuse to give up my obsession.", {
@@ -3213,16 +3233,25 @@ Toner {
 			"America stop pushing I know what I’m doing.", {
 				textTones = "annoyance, neutral";
 			},
+			"America stop pushing I know what I'm doing.", {
+				textTones = "annoyance, neutral";
+			},
 			"America the plum blossoms are falling.", {
 				textTones = "neutral, sadness";
 			},
 			"I haven’t read the newspapers for months, everyday somebody goes on trial for murder.", {
 				textTones = "disapproval, neutral";
 			},
+			"I haven't read the newspapers for months, everyday somebody goes on trial for murder.", {
+				textTones = "disapproval, neutral";
+			},
 			"America I feel sentimental about the Wobblies.", {
 				textTones = "sadness, grief";
 			},
 			"America I used to be a communist when I was a kid I’m not sorry.", {
+				textTones = "neutral, realization";
+			},
+			"America I used to be a communist when I was a kid I'm not sorry.", {
 				textTones = "neutral, realization";
 			},
 			"I smoke marijuana every chance I get.", {
@@ -3237,13 +3266,22 @@ Toner {
 			"My mind is made up there’s going to be trouble.", {
 				textTones = "fear, nervousness";
 			},
+			"My mind is made up there's going to be trouble.", {
+				textTones = "fear, nervousness";
+			},
 			"You should have seen me reading Marx.", {
 				textTones = "neutral";
 			},
 			"My psychoanalyst thinks I’m perfectly right.", {
 				textTones = "neutral, approval";
 			},
+			"My psychoanalyst thinks I'm perfectly right.", {
+				textTones = "neutral, approval";
+			},
 			"I won’t say the Lord’s Prayer.", {
+				textTones = "disapproval, neutral";
+			},
+			"I won't say the Lord's Prayer.", {
 				textTones = "disapproval, neutral";
 			},
 			"I have mystical visions and cosmic vibrations.", {
@@ -3252,13 +3290,22 @@ Toner {
 			"America I still haven’t told you what you did to Uncle Max after he came over from Russia.", {
 				textTones = "neutral";
 			},
+			"America I still haven't told you what you did to Uncle Max after he came over from Russia.", {
+				textTones = "neutral";
+			},
 			"I’m addressing you.", {
+				textTones = "neutral";
+			},
+			"I'm addressing you.", {
 				textTones = "neutral";
 			},
 			"Are you going to let your emotional life be run by Time Magazine?", {
 				textTones = "caring, curiosity";
 			},
 			"I’m obsessed by Time Magazine.", {
+				textTones = "desire, approval";
+			},
+			"I'm obsessed by Time Magazine.", {
 				textTones = "desire, approval";
 			},
 			"I read it every week.", {
@@ -3273,95 +3320,20 @@ Toner {
 			"It’s always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody’s serious but me.", {
 				textTones = "neutral, annoyance";
 			},
+			"It's always telling me about responsibility. Businessmen are serious. Movie producers are serious. Everybody's serious but me.", {
+				textTones = "neutral, annoyance";
+			},
 			"It occurs to me that I am America.", {
 				textTones = "realization, neutral";
 			},
 			"I am talking to myself again.", {
-				textTones = "neutral";
-			},
-			"admiration", {
-				textTones = "admiration";
-			},
-			"amusement", {
-				textTones = "amusement";
-			},
-			"anger", {
-				textTones = "anger";
-			},
-			"annoyance", {
-				textTones = "annoyance";
-			},
-			"approval", {
-				textTones = "approval";
-			},
-			"caring", {
-				textTones = "caring";
-			},
-			"confusion", {
-				textTones = "confusion";
-			},
-			"curiosity", {
-				textTones = "curiosity";
-			},
-			"desire", {
-				textTones = "desire";
-			},
-			"disappointment", {
-				textTones = "disappointment";
-			},
-			"disapproval", {
-				textTones = "disapproval";
-			},
-			"disgust", {
-				textTones = "disgust";
-			},
-			"embarrassment", {
-				textTones = "embarrassment";
-			},
-			"excitement", {
-				textTones = "excitement";
-			},
-			"fear", {
-				textTones = "fear";
-			},
-			"gratitude", {
-				textTones = "gratitude";
-			},
-			"grief", {
-				textTones = "grief";
-			},
-			"joy", {
-				textTones = "joy";
-			},
-			"love", {
-				textTones = "love";
-			},
-			"nervousness", {
-				textTones = "nervousness";
-			},
-			"optimism", {
-				textTones = "optimism";
-			},
-			"pride", {
-				textTones = "pride";
-			},
-			"realization", {
-				textTones = "realization";
-			},
-			"relief", {
-				textTones = "relief";
-			},
-			"remorse", {
-				textTones = "remorse";
-			},
-			"sadness", {
-				textTones = "sadness";
-			},
-			"surprise", {
-				textTones = "surprise";
+				textTones = "neutral, neutral";
 			},
 			"neutral", {
-				textTones = "neutral";
+				textTones = "neutral, neutral";
+			},
+			{
+				textTones = "neutral, neutral";
 			},
 		);
 
