@@ -17,7 +17,7 @@ s.waitForBoot {
 		// delay
 		sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
-		sound = LPF.ar(sound, filterFreq, filterRes);
+		//sound = LPF.ar(sound, filterFreq, filterRes);
 		//sound = HPF.ar(sound, 200, 1);
 		sound = FreeVerb.ar(sound, 0.3, reverbMix) *fade;
 
@@ -37,9 +37,8 @@ p.at(\p2).stop;
 p.at(\p3).stop;
 p.at(\p4).stop;
 p.at(\p5).stop;
-
-
-
+p.at(\p6).stop;
+p.at(\p7).stop;
 
 
 
