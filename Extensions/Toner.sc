@@ -1114,7 +1114,7 @@ Toner {
 		};
 
 		if (textTone == "love") {
-			~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [3], [1], [1]];
+			~rate = [[1, 2, 1.6, 3, 1.1], [0], [3], [0], [0], [1], [1]];
 
 			presets[0].put(\amp, [0.5]);
 			presets[0].put(\filterFreq, 1500);
@@ -1140,7 +1140,7 @@ Toner {
 			presets[1].put(\delayTime, 0);
 			presets[1].put(\decayTime, 0);
 
-			presets[2].put(\amp, [0.5]);
+			presets[2].put(\amp, [0.7]);
 			presets[2].put(\filterFreq, 500);
 			presets[2].put(\filterRes, 3);
 			presets[2].put(\start, 0);
@@ -1164,7 +1164,7 @@ Toner {
 			presets[3].put(\delayTime, 0);
 			presets[3].put(\decayTime, 0);
 
-			presets[4].put(\amp, [0.5]);
+			presets[4].put(\amp, [0]);
 			presets[4].put(\filterFreq, 500);
 			presets[4].put(\filterRes, 3);
 			presets[4].put(\start, 0);
@@ -1178,7 +1178,7 @@ Toner {
 			presets[4].put(\decayTime, 4);
 
 
-			presets[5].put(\amp, [0.5]);
+			presets[5].put(\amp, [0.2]);
 			presets[5].put(\filterFreq, 500);
 			presets[5].put(\filterRes, 3);
 			presets[5].put(\start, 0);
@@ -1191,7 +1191,7 @@ Toner {
 			presets[5].put(\delayTime, 0.1);
 			presets[5].put(\decayTime, 4);
 
-			presets[6].put(\amp, [0.5]);
+			presets[6].put(\amp, [0.2]);
 			presets[6].put(\filterFreq, 500);
 			presets[6].put(\filterRes, 3);
 			presets[6].put(\start, 0);
@@ -1513,7 +1513,7 @@ Toner {
 			presets[1].put(\delayTime, 0);
 			presets[1].put(\decayTime, 0);
 
-			presets[2].put(\amp, [0.6]);
+			presets[2].put(\amp, [0.8]);
 			presets[2].put(\filterFreq, 500);
 			presets[2].put(\filterRes, 3);
 			presets[2].put(\start, 0);
@@ -1539,7 +1539,7 @@ Toner {
 			presets[3].put(\delayTime, 0.1);
 			presets[3].put(\decayTime, 4);
 
-			presets[4].put(\amp, [0.07]);
+			presets[4].put(\amp, [0.1]);
 			presets[4].put(\filterFreq, 2000);
 			presets[4].put(\filterRes, 4);
 			presets[4].put(\start, 0);
@@ -3483,7 +3483,7 @@ Toner {
 		if (textTone == "neutral") {
 			~rate = [[1,1,2,1,1,1,1,1,1,1], [0], [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2], [0], [0], [0,0,0,0,0,0,0,0,0,0,0, 0, 0, 0, 0, 0, 0, 0, 2.5, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0,0, 0, 0, 0, 0], [0,0,0,0,0,0,0, 0, 0, 0, 1, 0, 0, 0, 0, 0]];
 
-			presets[0].put(\amp, [0.3]);
+			presets[0].put(\amp, [0.2]);
 			presets[0].put(\filterFreq, 3000);
 			presets[0].put(\filterRes, 3);
 			presets[0].put(\start, 1000000); //1000000
@@ -3543,7 +3543,7 @@ Toner {
 			presets[4].put(\delayTime, 0.1);
 			presets[4].put(\decayTime, 4);
 
-			presets[5].put(\amp, [0.1]);
+			presets[5].put(\amp, [0.08]);
 			presets[5].put(\filterFreq, 1500);
 			presets[5].put(\filterRes, 3);
 			presets[5].put(\start, 0);
@@ -3556,7 +3556,7 @@ Toner {
 			presets[5].put(\delayTime, 0.1);
 			presets[5].put(\decayTime, 3);
 
-			presets[6].put(\amp, [0.1]);
+			presets[6].put(\amp, [0.08]);
 			presets[6].put(\filterFreq, 500);
 			presets[6].put(\filterRes, 3);
 			presets[6].put(\start, 0);
@@ -3998,7 +3998,7 @@ Toner {
 				textTones = "annoyance, optimism";
 			},
 			"I don't feel good don't bother me.", {
-				textTones = "approval, optimism";
+				textTones = "annoyance, optimism";
 			},
 			"I won’t write my poem till I’m in my right mind.", {
 				textTones = "realization, neutral";
