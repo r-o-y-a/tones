@@ -6,7 +6,7 @@ import json
 import websockets
 import asyncio
 
-network_ip = '172.20.10.2'
+network_ip = '192.168.0.10'
 
 data = None
 
