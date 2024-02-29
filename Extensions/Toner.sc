@@ -358,7 +358,7 @@ Toner {
 		};
 
 		if (runOffline == true || textTones.isNil) {
-			"offline".postln;
+			"ooo".postln;
 			textTones = this.getTonesFromStatic(text);
 		};
 

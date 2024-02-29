@@ -156,8 +156,8 @@
 
 
         if (tones.length > 0 && tones[1] != undefined) {
-            primaryData.innerHTML = "<h1>tone: </h1> <h2>" + tones[0] + "</h2>";
-            secondaryData.innerHTML = "<h1>secondary tone: </h1> <h2>" + tones[1]+ "</h2>";
+            primaryData.innerHTML = "<h2>" + tones[0] + "</h2>";
+            secondaryData.innerHTML = "<h1>secondary: </h1> <h2>" + tones[1]+ "</h2>";
             secondaryData.style.visibility = "visible";
             notationDiv.style.visibility = "visible";
 
@@ -173,7 +173,7 @@
             secondaryNotationDiv.classList.remove("inactive");
         }
         else {
-            primaryData.innerHTML = "tone: " + tones[0];
+            primaryData.innerHTML = tones[0];
             secondaryData.style.visibility = "hidden";
             notationDiv.style.visibility = "hidden";
         }
