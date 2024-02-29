@@ -46,15 +46,21 @@ SynthDef(\reverb, { arg outBus = 0, inBus;
 }).add;
 // END TEST
 
-
-
-
 	s.sync;
 
 	t = Toner.new(\samplePlayer1, \samplePlayer2, true); // run offline
 	//t = Toner.new(\samplePlayer1, \samplePlayer2);
+	t.loadPreprocessor();
 }
 );
+
+
+
+1 = I can’t stand my own mind.
+2 = here's a test
+
+
+
 
 p.at(\p1).stop;
 p.at(\p2).stop;
@@ -87,25 +93,17 @@ y = Synth(\decay, [\effectBus, ~bus, \outBus, 0], ~effects);
 
 
 
+/*
+(
+thisProcess.interpreter.preProcessor = {|codeBlock|
+	c = codeBlock.split($ );
+	d = codeBlock.replace("1 = ", replace:"");
+	d.postln;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-p = t.t("America two dollars and twentyseven cents January 17, 1956.", 1)
-p = t.t("I can't stand my own mind.", 1)
-p = t.t("America when will we end the human war?", 1)
-p = t.t("Go fuck yourself with your atom bomb.", 1)
-p = t.t("I don't feel good don't bother me.", 1)
-p = t.t("I won't write my poem till I'm in my right mind.", 1)
-p = t.t("America when will you be angelic?")
-p = t.t("When will you take off your clothes?")
+	if(codeBlock.beginsWith("1"), {
+		"p = t.t(\""++d++"\", 1);"
+	}, {
+		"p = t.t(\""++d++"\");"
+	});
+};
+)
