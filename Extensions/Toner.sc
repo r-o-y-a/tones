@@ -37,12 +37,14 @@ Toner {
 		thisProcess.interpreter.preProcessor = {|codeBlock|
 			var c, d;
 			c = codeBlock.split($ );
-			d = codeBlock.replace("1 = ", replace:"");
+			d = codeBlock.replace(": ", replace:"");
+			d = d.replace(":: ", replace:"");
 
-			if(codeBlock.beginsWith("1"), {
+
+			if(codeBlock.beginsWith(":"), {
 				"p = t.t(\""++d++"\", 1);"
 			}, {
-				if(codeBlock.beginsWith("2"), {
+				if(codeBlock.beginsWith("::"), {
 					"p = t.t(\""++d++"\");"
 				}, {
 					codeBlock

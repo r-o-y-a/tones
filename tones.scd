@@ -56,8 +56,8 @@ SynthDef(\reverb, { arg outBus = 0, inBus;
 
 
 
-1 = I can’t stand my own mind.
-2 = here's a test
+: I can’t stand my own mind.
+:: here's a test
 
 
 
