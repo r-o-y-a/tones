@@ -37,8 +37,8 @@ Toner {
 		thisProcess.interpreter.preProcessor = {|codeBlock|
 			var c, d;
 			c = codeBlock.split($ );
-			d = codeBlock.replace(": ", replace:"");
-			d = d.replace(":: ", replace:"");
+			d = codeBlock.replace(":: ", replace:"");
+			d = d.replace(": ", replace:"");
 
 
 			if(codeBlock.beginsWith(":"), {
