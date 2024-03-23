@@ -1,4 +1,4 @@
-s.options.sampleRate = 48000 // run and then reboot server (was 44100)
+s.options.sampleRate = 48000
 
 (
 s.waitForBoot {
@@ -16,14 +16,10 @@ s.waitForBoot {
 		var sound = PlayBuf.ar(2, bufnum, playbackRate, loop: loop, startPos: start);
 		sound = sound *  amp;
 
-		// delay
 		sound = CombL.ar(sound, maxdelaytime: delayMaxTime, delaytime: delayTime, decaytime: decayTime);
 
-		//sound = LPF.ar(sound, filterFreq, filterRes);
-		//sound = HPF.ar(sound, 200, 1);
 		sound = FreeVerb.ar(sound, 0.3, reverbMix) *fade;
 
-		//Out.ar(0, sound*fade);
 		Out.ar(0, sound*fade);
 	}).add;
 
@@ -32,13 +28,9 @@ s.waitForBoot {
 	s.sync;
 
 	t = Toner.new(\samplePlayer1, \samplePlayer2, true); // ooo
-	//t = Toner.new(\samplePlayer1, \samplePlayer2);
 	t.loadPreprocessor();
 }
 );
-
-
-
 
 
 
