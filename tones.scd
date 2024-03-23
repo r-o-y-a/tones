@@ -55,9 +55,62 @@ SynthDef(\reverb, { arg outBus = 0, inBus;
 );
 
 
+s.options.sampleRate = 48000 // run and then reboot server (44100)
 
-: I can’t stand my own mind.
-:: here's a test
+
+// "America" by Allen Ginsberg
+// Used with Permission from the Estate of Allen Ginsberg. Abridged for performance.
+
+America I have given you all and now I am nothing.
+: America two dollars and twentyseven cents January 17, 1956.
+: I can't stand my own mind.
+: America when will we end the human war?
+: Go fuck yourself with your atom bomb.
+: I don't feel good don't bother me.
+: I won't write my poem till I'm in my right mind.
+
+// (3:30 - 4:15) - OP-Z ljud
+
+// neutral, realization
+:: America when will you be angelic?
+
+// neutral, curiosity
+:: When will you take off your clothes?
+
+// curiosity, disapproval
+:: When will you look at yourself through the grave?
+
+// curiosity, confusion
+:: When will you be worthy of your million Trotskyites?
+
+// neutral, sadness
+:: America why are your libraries full of tears?
+
+// curiosity, neutral
+:: America when will you send your eggs to India?
+
+// annoyance, anger
+:: I'm sick of your insane demands.
+
+// neutral, annoyance
+:: America after all it is you and I who are perfect not the next world.
+
+// [...]
+
+// desire, neutral
+:: I’m trying to come to the point.
+
+// disapproval, approval
+:: I refuse to give up my obsession.
+
+// annoyance, neutral
+:: America stop pushing I know what I’m doing.
+
+// realization, approval
+:: America the plum blossoms are falling.
+
+
+
 
 
 
@@ -70,9 +123,10 @@ p.at(\p5).stop;
 p.at(\p6).stop;
 p.at(\p7).stop;
 
+
+
+
 s.queryAllNodes
-
-
 
 
 // TEST

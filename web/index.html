@@ -11,6 +11,7 @@
         body {
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             padding: 5em;
+            background-color: rgb(32, 33, 33);
         }
         h1 {
             font-size: 20px;
@@ -27,18 +28,20 @@
         #flasher {
             width: 100px;
             height: 100px;
-            background-color: #fff;
+            background-color: rgb(32, 33, 33);
             transition: background-color 0.5s;
         }
         h1#primaryData {
             display: block;
             margin: 0 0 30px 0;
             padding: 0 0 0 0;
+            color: rgb(222, 237, 237);
         }
         h1#secondaryData {
             display: block;
             margin: 40px 0 30px 0;
             padding: 0 0 0 0;
+            color: rgb(222, 237, 237);
         }
         div.inactive {
             display: none;
@@ -54,6 +57,8 @@
         setTimeout(function () {
             flasher.style.backgroundColor = getColor(primaryTone);
         }, 500);
+
+        flasher.innerHTML = getColor(primaryTone);
     }
 
     function getColor(tone) {
@@ -89,7 +94,7 @@
                 hexColor = '#696969'; // Dim Gray
                 break;
             case 'disapproval':
-                hexColor = '#333333'; // 
+                hexColor = '#685854'; // 
                 break;
             case 'disgust':
                 hexColor = '#6B8E23'; // Olive Drab
@@ -140,7 +145,7 @@
                 hexColor = '#FFD700'; // Gold
                 break;
             case 'neutral':
-                hexColor = '#D3D3D3'; // Light Gray
+                hexColor = '#A49D9B'; // Light-ish Gray
                 break;
             default:
                 hexColor = '#cccccc'; 
@@ -157,7 +162,7 @@
 
         if (tones.length > 0 && tones[1] != undefined) {
             primaryData.innerHTML = "<h2>" + tones[0] + "</h2>";
-            secondaryData.innerHTML = "<h1>secondary: </h1> <h2>" + tones[1]+ "</h2>";
+            secondaryData.innerHTML = "<h1>2nd: </h1> <h2>" + tones[1]+ "</h2>";
             secondaryData.style.visibility = "visible";
             notationDiv.style.visibility = "visible";
 
@@ -179,7 +184,7 @@
         }
     }
 
-    var socket = new WebSocket("ws://192.168.0.10:8081");
+    var socket = new WebSocket("ws://172.20.10.2:8081");
 
     socket.onopen = function(event) {
         console.log("WebSocket connection opened.");
