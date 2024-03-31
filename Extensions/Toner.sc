@@ -678,7 +678,7 @@ Toner {
 			presets[1].put(\delayTime, 0);
 			presets[1].put(\decayTime, 0);
 
-			presets[2].put(\amp, [0.1]);
+			presets[2].put(\amp, [0.3]);
 			presets[2].put(\filterFreq, 500);
 			presets[2].put(\filterRes, 3);
 			presets[2].put(\start, 0);
@@ -715,7 +715,7 @@ Toner {
 			presets[4].put(\delayTime, 0.1);
 			presets[4].put(\decayTime, 4);
 
-			presets[5].put(\amp, [0.01]);
+			presets[5].put(\amp, [0.03]);
 			presets[5].put(\filterFreq, 500);
 			presets[5].put(\filterRes, 3);
 			presets[5].put(\start, 0);
@@ -728,7 +728,7 @@ Toner {
 			presets[5].put(\delayTime, 0.1);
 			presets[5].put(\decayTime, 4);
 
-			presets[6].put(\amp, [0.01,0.01,0.005,0.004,0.003,0.002,0.001,0.004,0.004,0.005]);
+			presets[6].put(\amp, [0.03,0.03,0.007,0.006,0.005,0.004,0.003,0.006,0.006,0.007]);
 			presets[6].put(\filterFreq, 500);
 			presets[6].put(\filterRes, 3);
 			presets[6].put(\start, 0);
@@ -2873,9 +2873,9 @@ Toner {
 		};
 
 		if (textTone == "confusion") {
-			~rate = [[1, 2, 1.6, 3, 1.1], [1], [3], [0], [3], [1], [1]];
+			~rate = [[1], [1], [4,4,2.5,3.1,3.7,3.7,1.9,3.1,3,3,3,3,3,3.3,3.3,2,2,3,3,3,3,3,3,3], [0], [3], [1], [3]];
 
-			presets[0].put(\amp, [0.5]);
+			presets[0].put(\amp, [0.2]);
 			presets[0].put(\filterFreq, 1500);
 			presets[0].put(\filterRes, 3);
 			presets[0].put(\start, 0);
@@ -2901,7 +2901,7 @@ Toner {
 			presets[1].put(\delayTime, 0);
 			presets[1].put(\decayTime, 0);
 
-			presets[2].put(\amp, [0.5]);
+			presets[2].put(\amp, [0.3]);
 			presets[2].put(\filterFreq, 500);
 			presets[2].put(\filterRes, 3);
 			presets[2].put(\start, 0);
@@ -2927,7 +2927,7 @@ Toner {
 			presets[3].put(\delayTime, 0);
 			presets[3].put(\decayTime, 0);
 
-			presets[4].put(\amp, [0.5]);
+			presets[4].put(\amp, [0]);
 			presets[4].put(\filterFreq, 500);
 			presets[4].put(\filterRes, 3);
 			presets[4].put(\start, 0);
@@ -2941,7 +2941,7 @@ Toner {
 			presets[4].put(\decayTime, 4);
 
 
-			presets[5].put(\amp, [0.5]);
+			presets[5].put(\amp, [0.01]);
 			presets[5].put(\filterFreq, 500);
 			presets[5].put(\filterRes, 3);
 			presets[5].put(\start, 0);
@@ -2954,7 +2954,7 @@ Toner {
 			presets[5].put(\delayTime, 0.1);
 			presets[5].put(\decayTime, 4);
 
-			presets[6].put(\amp, [0.5]);
+			presets[6].put(\amp, [0.01]);
 			presets[6].put(\filterFreq, 500);
 			presets[6].put(\filterRes, 3);
 			presets[6].put(\start, 0);
@@ -4027,7 +4027,7 @@ Toner {
 				textTones = "neutral, curiosity";
 			},
 			"When will you look at yourself through the grave?", {
-				textTones = "curiosity, disapproval";
+				textTones = "curiosity, confusion";
 			},
 			"When will you be worthy of your million Trotskyites?", {
 				textTones = "curiosity, confusion";
@@ -4175,6 +4175,27 @@ Toner {
 			},
 			"I am talking to myself again.", {
 				textTones = "neutral, neutral";
+			},
+			"realization", {
+				textTones = "realization, realization";
+			},
+			"curiosity", {
+				textTones = "curiosity, curiosity";
+			},
+			"confusion", {
+				textTones = "confusion, confusion";
+			},
+			"sadness", {
+				textTones = "sadness, sadness";
+			},
+			"anger", {
+				textTones = "anger, anger";
+			},
+			"annoyance", {
+				textTones = "annoyance, annoyance";
+			},
+			"approval", {
+				textTones = "approval, approval";
 			},
 			"neutral", {
 				textTones = "neutral, neutral";
