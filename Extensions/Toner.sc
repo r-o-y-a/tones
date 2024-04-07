@@ -3140,7 +3140,7 @@ Toner {
 			presets[0].put(\delayTime, 0);
 			presets[0].put(\decayTime, 0);
 
-			presets[1].put(\amp, [0.3]);
+			presets[1].put(\amp, [0.5]);
 			presets[1].put(\filterFreq, 1500);
 			presets[1].put(\filterRes, 3);
 			presets[1].put(\start, 0);
@@ -3153,7 +3153,7 @@ Toner {
 			presets[1].put(\delayTime, 0);
 			presets[1].put(\decayTime, 0);
 
-			presets[2].put(\amp, [0.4]);
+			presets[2].put(\amp, [0.6]);
 			presets[2].put(\filterFreq, 500);
 			presets[2].put(\filterRes, 3);
 			presets[2].put(\start, 0);
@@ -3202,7 +3202,7 @@ Toner {
 			presets[5].put(\delayTime, 0.1);
 			presets[5].put(\decayTime, 4);
 
-			presets[6].put(\amp, [0.05]);
+			presets[6].put(\amp, [0.07]);
 			presets[6].put(\filterFreq, 500);
 			presets[6].put(\filterRes, 3);
 			presets[6].put(\start, 0);
