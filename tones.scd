@@ -1,4 +1,7 @@
-s.options.sampleRate = 48000
+s.options.sampleRate = 48000 // TODO: fix sample rate in buffer play
+// http://172.20.10.2:8080/
+// TEST for screen size
+//df asdf asdf asdf asdf asdf adf adf adf adf asdf asdf asdf asdf asdfa.
 
 (
 s.waitForBoot {
@@ -24,13 +27,35 @@ s.waitForBoot {
 	}).add;
 
 
+	b = Buffer.read(s, "/Users/roya/Documents/roya/Supercollider/KMH/tones/static/tones_america_transition.wav");
+	SynthDef(\usa, {|buf, amp = 0.2|
+		var sig;
+		sig = PlayBuf.ar(
+			1,
+			buf,
+			1 * BufRateScale.kr(buf),
+			loop: 1
+		);
+		Out.ar([0,1], sig*amp);
+	}).add;
+
 
 	s.sync;
 
-	t = Toner.new(\samplePlayer1, \samplePlayer2, true); // ooo
+	t = Toner.new(\samplePlayer1, \samplePlayer2, true);
 	t.loadPreprocessor();
+	t.getTones(".", 1, 0);
 }
 );
+
+
+z = Synth(\usa, [\buf, b]);
+z.set(\amp, 0.09);
+z.free;
+
+
+
+
 
 
 

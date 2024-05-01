@@ -18,7 +18,7 @@ Toner {
 			runOffline = 1;
 		};
 
-		textTones = this.getTonesFromText(text, hideSecondary, runOffline);
+		textTones = this.getTones(text, hideSecondary, runOffline);
 		tones = textTones.split($,);
 
 		primaryTextTone = tones[0];
@@ -366,7 +366,7 @@ Toner {
 		^textTones;
 	}
 
-	getTonesFromText { | text, hideSecondary, runOffline |
+	getTones { | text, hideSecondary, runOffline |
 		var textTones, b;
 		var textTone, secondaryTextTone;
 
@@ -4199,6 +4199,9 @@ Toner {
 			},
 			"neutral", {
 				textTones = "neutral, neutral";
+			},
+			".", {
+				textTones = ".,.";
 			},
 			{
 				textTones = "neutral, neutral";

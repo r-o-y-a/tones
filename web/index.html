@@ -53,12 +53,18 @@
         var tones = data.data.toString().split(",");
         var primaryTone = tones[0];
         var flasher = document.getElementById("flasher");
-        flasher.style.backgroundColor = "#cccccc";
-        setTimeout(function () {
+        if (primaryTone == '.') {
             flasher.style.backgroundColor = getColor(primaryTone);
-        }, 500);
+            flasher.innerHTML = ".";
+        }
+        else {
+            flasher.style.backgroundColor = "#cccccc";
+            setTimeout(function () {
+                flasher.style.backgroundColor = getColor(primaryTone);
+            }, 500);
 
-        flasher.innerHTML = getColor(primaryTone);
+            flasher.innerHTML = getColor(primaryTone);
+        }
     }
 
     function getColor(tone) {
@@ -146,6 +152,9 @@
                 break;
             case 'neutral':
                 hexColor = '#A49D9B'; // Light-ish Gray
+                break;
+            case '.':
+                hexColor = '#202121'; // background color
                 break;
             default:
                 hexColor = '#cccccc'; 
