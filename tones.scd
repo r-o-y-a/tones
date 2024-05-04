@@ -1,9 +1,10 @@
-s.options.sampleRate = 48000 // TODO: fix sample rate in buffer play
 // http://172.20.10.2:8080/
+// Audio MIDI Setup sample rate
 // TEST for screen size
 //df asdf asdf asdf asdf asdf adf adf adf adf asdf asdf asdf asdf asdfa.
 
 (
+s.options.sampleRate = 48000; // TODO: fix sample rate in buffer play
 s.waitForBoot {
 
 	~rate = [];
@@ -33,8 +34,8 @@ s.waitForBoot {
 		sig = PlayBuf.ar(
 			1,
 			buf,
-			1 * BufRateScale.kr(buf),
-			loop: 1
+			1,
+			loop: 0
 		);
 		Out.ar([0,1], sig*amp);
 	}).add;
@@ -48,21 +49,17 @@ s.waitForBoot {
 }
 );
 
+s.options.sampleRate;
 
 z = Synth(\usa, [\buf, b]);
-z.set(\amp, 0.09);
+z.set(\amp, 0.03);
 z.free;
 
 
-
-
-
-
-
-
-
-
-
+// starta webservern sist!!! make sure no errors
+// if page is lagging, reboot web server
+// fade out?
+// Fix Neutral click sound
 
 
 
