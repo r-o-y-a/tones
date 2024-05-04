@@ -3500,7 +3500,7 @@ Toner {
 			presets[0].put(\amp, [0.2]);
 			presets[0].put(\filterFreq, 3000);
 			presets[0].put(\filterRes, 3);
-			presets[0].put(\start, 1000000); //1000000
+			presets[0].put(\start, 0); //1000000
 			presets[0].put(\loop, 1);
 			presets[0].put(\lfoPseqValue, [0]);
 			presets[0].put(\reverbMix, 0);
